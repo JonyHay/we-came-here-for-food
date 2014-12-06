@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class Scoreboard {
 	
 	private ArrayList<Score> scores;
-	
+	// hallo
 	public Scoreboard() {
 		
 		scores = new ArrayList<Score>();

@@ -23,7 +23,7 @@ public class Agent
 		bonusHealing = 0;
 	}
 	
-	public void update(long timeElapsed)
+	public void update(int hours)
 	{
 		
 	}

@@ -6,8 +6,6 @@ import game2D.Sprite;
 import java.util.ArrayList;
 import java.util.Random;
 
-import sun.management.Agent;
-
 public class City extends Sprite {
 	private String cityName;
 	private int population; // in thousands

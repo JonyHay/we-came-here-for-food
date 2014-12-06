@@ -7,15 +7,20 @@ public class Agent
 	//private String surName;
 	//private boolean gender;
 	//private int experienceTotal;
-	private ArrayList<String> upgradesBought;
 	private String status;
-	private String speciality;
+	private Speciality speciality;
+	private int bonusOffence;
+	private int bonusDefence;
+	private int bonusHealing;
 	
-	public Agent(int agentID, String foreName, String speciality)
+	public Agent(int agentID, String foreName, Speciality speciality)
 	{
 		this.agentID = agentID;
 		this.foreName = foreName;
 		this.speciality = speciality;
+		bonusOffence = 0;
+		bonusDefence = 0;
+		bonusHealing = 0;
 	}
 
 	public int getAgentID() 
@@ -28,16 +33,6 @@ public class Agent
 		return foreName;
 	}
 
-	public ArrayList<String> getUpgradesBought() 
-	{
-		return upgradesBought;
-	}
-	
-	public void addUpgradesBought(String upgrade) 
-	{
-		upgradesBought.add(upgrade);
-	}
-
 	public String getStatus() 
 	{
 		return status;
@@ -48,13 +43,37 @@ public class Agent
 		this.status = status;
 	}
 
-	public String getSpeciality() 
+	public Speciality getSpeciality() 
 	{
 		return speciality;
 	}
 
-	public void setSpeciality(String speciality) 
+	public void setSpeciality(Speciality speciality) 
 	{
 		this.speciality = speciality;
+	}
+
+	public int getBonusOffence() {
+		return bonusOffence;
+	}
+
+	public void addBonusOffence(int bonusOffence) {
+		this.bonusOffence += bonusOffence;
+	}
+
+	public int getBonusDefence() {
+		return bonusDefence;
+	}
+
+	public void addBonusDefence(int bonusDefence) {
+		this.bonusDefence += bonusDefence;
+	}
+
+	public int getBonusHealing() {
+		return bonusHealing;
+	}
+
+	public void addBonusHealing(int bonusHealing) {
+		this.bonusHealing += bonusHealing;
 	}
 }

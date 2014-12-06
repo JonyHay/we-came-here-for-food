@@ -6,7 +6,7 @@ public class Agent
 	private String foreName;
 	//private String surName;
 	//private boolean gender;
-	//private int experience;
+	//private int experienceTotal;
 	private ArrayList<String> upgradesBought;
 	private String status;
 	private String speciality;

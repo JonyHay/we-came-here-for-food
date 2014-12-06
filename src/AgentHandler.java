@@ -6,7 +6,7 @@ public class AgentHandler
 	
 	public AgentHandler()
 	{
-		
+		//nothing here yet
 	}
 	
 	public ArrayList<Agent> getAgentList()

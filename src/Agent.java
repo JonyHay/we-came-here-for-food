@@ -22,6 +22,11 @@ public class Agent
 		bonusDefence = 0;
 		bonusHealing = 0;
 	}
+	
+	public void update(long timeElapsed)
+	{
+		
+	}
 
 	public int getAgentID() 
 	{

@@ -1,65 +1,77 @@
 package hack;
 
-import java.awt.Point;
+import game2D.Animation;
+import game2D.Sprite;
 
-public class City {
+import java.util.ArrayList;
+import java.util.Random;
+
+import sun.management.Agent;
+
+public class City extends Sprite {
 	private String cityName;
-	private Point coordinates;
-	private int population;			// in thousands
-	private float infectionRate;	// out of hundred
+	private int population; // in thousands
+	private float infectionRate; // out of hundred
 	private int zombies;
-	
-	final private int maxInfection = 100;  // max infection, elimination
-	
-	public City(String name, int positionX, int positionY, int population, float infectRate, int zombies){
+	private ArrayList<Agent> agents = new ArrayList<Agent>(); 
+	private long countup = 0;
+
+	final private int maxInfection = 100; // max infection, elimination
+
+	public City(String name, int population, int zombies, Animation a) {
+		super(a);
 		cityName = name;
-		coordinates.x = positionX;
-		coordinates.y = positionY;
 		this.population = population;
-		infectionRate = infectRate;	
 		this.zombies = zombies;
+		infectionRate = zombies * 100 / population;
 	}
-	
-	public void increaseInfection(){
+
+	public void increaseInfection() {
 		if (infectionRate < maxInfection)
-			infectionRate++;
+			infectionRate += 0.5f;
 		else
 			infectionRate = maxInfection;
 	}
-	public void increaseInfectionBy(int n){
+
+	public void increaseInfectionBy(int n) {
 		if (infectionRate + n <= maxInfection)
 			infectionRate += n;
 		else
 			infectionRate = maxInfection;
 	}
-	public void decreaseInfection(){
+
+	public void decreaseInfection() {
 		if (infectionRate >= 0)
-			infectionRate--;
+			infectionRate -= 0.5f;
 		else
 			infectionRate = 0;
 	}
-	public void decreaseInfectionBy(int n){
+
+	public void decreaseInfectionBy(int n) {
 		if (infectionRate - n >= 0)
 			infectionRate -= n;
 		else
 			infectionRate = 0;
 	}
-	
-	public void updateInfection(){
-		int infection = (int) ((int) Math.random() * infectionRate + 1);
-		infection = population / maxInfection * infection;
-		zombies += infection;
-		if (population - infection >= 0)
-			population -= infection;
-		else
-			population = 0;
-		
-		if (zombies != 0)
-			increaseInfection();
-	}
-	public void eliminatingZombies(int eliminatingRate){
-		if (eliminatingRate != maxInfection)
+
+	public void updateInfection() {
+		if (zombies > 0)
 		{
+			int infection = (int) ((int) Math.random() * infectionRate + 1);
+			infection = population / maxInfection * infection;
+			zombies += infection;
+			if (population - infection >= 0)
+				population -= infection;
+			else
+				population = 0;
+	
+			if (zombies != 0)
+				increaseInfection();
+		}
+	}
+
+	public void eliminatingZombies(int eliminatingRate) {
+		if (eliminatingRate != maxInfection) {
 			int elimination = zombies / maxInfection * eliminatingRate;
 			if (zombies - elimination >= 0)
 				zombies -= elimination;
@@ -67,9 +79,9 @@ public class City {
 				zombies = 0;
 		}
 	}
-	public void eliminatingPeople(int eliminatingRate){
-		if (eliminatingRate != maxInfection)
-		{
+
+	public void eliminatingPeople(int eliminatingRate) {
+		if (eliminatingRate != maxInfection) {
 			int elimination = population / maxInfection * eliminatingRate;
 			if (population - elimination >= 0)
 				population -= elimination;
@@ -77,21 +89,53 @@ public class City {
 				population = 0;
 		}
 	}
-	
-	public Point getCoordinates(){
-		return coordinates;
+
+	// TODO: finish
+	public void addAgents(ArrayList<Agent> a) {
+		if (a.size() != 0) {
+			for (int i = 0; i < a.size(); i++) {
+				agents.add(a.get(i));
+			}
+		}
 	}
-	public int getX(){
-		return coordinates.x;
-	}
-	public void setX(int x){
-		coordinates.x = x;
-	}
-	public int getY(){
-		return coordinates.y;
-	}
-	public void setY(int y){
-		coordinates.y = y;
+
+	public void updateAgents(long elapsed)
+    {
+        countup += elapsed;
+        if (countup < 24000)
+        {
+                return;
+        }
+        for(int i = 0; i < agents.size(); i++)
+        {
+                Random r =  new Random();
+                int infectedPercent = zombies/population*100;
+                int agentOffenceAbility = agents.get(i).getBonusOffence() + agents.get(i).getSpeciality().getOffence();
+                int zombieReduction = Math.abs(((r.nextInt(zombies/(10 + agentOffenceAbility)) + agentOffenceAbility)  - (r.nextInt(zombies/10)));
+                if (zombieReduction < zombies)
+                {
+                        zombies = zombies - zombieReduction;
+                }
+                int agentHealingAbility = agents.get(i).getBonusHealing() + agents.get(i).getSpeciality().getHealing();
+                int zombiesHealed = (Math.abs(((r.nextInt(zombies/(10 + agentHealingAbility)) + agentHealingAbility)  - (r.nextInt(zombies/10))) + 1)/2;
+                if (zombiesHealed < zombies)
+                {
+                        zombies = zombies - zombiesHealed;
+                        population = population + zombiesHealed;
+                }
+                int agentDefenceAbility = agents.get(i).getBonusDefence() + agents.get(i).getSpeciality().getDefence();
+                if (r.nextInt(infectedPercent) > ((r.nextInt(infectedPercent + agentHealingAbility) + agentHealingAbility));
+                {
+                        agents.remove(i);
+                        i--;
+                }
+        }
+        countup = 0;
+    }
+
+	public int getPercentageOfPopulation() {
+		int total = zombies + population;
+		return (int) (population / 100 * total);
 	}
 
 	public String getCityName() {
@@ -118,16 +162,12 @@ public class City {
 		this.infectionRate = infectionRate;
 	}
 
-	public int getZombies() {
+	public int getZombieNumber() {
 		return zombies;
 	}
 
-	public void setZombies(int zombies) {
+	public void setZombieNumber(int zombies) {
 		this.zombies = zombies;
 	}
 
-	public void setCoordinates(Point coordinates) {
-		this.coordinates = coordinates;
-	}
-	
 }

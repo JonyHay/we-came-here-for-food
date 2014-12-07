@@ -4,17 +4,26 @@ import game2D.Sound;
 
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.ArrayList;
 import java.util.Random;
 
 public class MouseHandler implements MouseListener {
 	
 	private Cities cities;
 	private int selectedCity;
+	private ArrayList<Ring> rings;
 	
-	public MouseHandler(Cities c) {
+	public MouseHandler(Cities c, ArrayList<Ring> r) {
 		
 		selectedCity = -1;
 		cities = c;
+		rings = r;
+		
+	}
+	
+	public void resetReferenceToRings(ArrayList<Ring> r) {
+		
+		this.rings = r;
 		
 	}
 
@@ -28,6 +37,7 @@ public class MouseHandler implements MouseListener {
 	public void mouseClicked(MouseEvent e) {
 		
 		System.out.println("*Clicked at " + e.getX() + "/" + e.getY());
+		rings.add(new Ring(e.getX(), e.getY()));
 		int rnd = new Random().nextInt(3);
 		new Sound("res/blim" + rnd + ".wav").start();
 		

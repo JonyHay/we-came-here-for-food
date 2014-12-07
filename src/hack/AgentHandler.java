@@ -89,6 +89,34 @@ public class AgentHandler
             i++;
     }
 
-
+    public void buyUpgrade(String upgradeName)
+    {
+    	if (upgradeName.equals("Better Med-Kits"))
+    	{
+    		medicClass.addHealing(10);
+    	}
+    	if (upgradeName.equals("Big Guns!"))
+    	{
+    		medicClass.addOffence(5);
+    		defenceClass.addOffence(5);
+    		offenceClass.addOffence(5);
+    	}	
+    }
+    
+    public void buyUpgrade(String upgradeName, int agentID)
+    {
+    	if (upgradeName.equals("Cybernetic Implants"))
+    	{
+    		medicClass.addHealing(10);
+    	}
+    	 for (int j = 0; j < 15; j++)
+         {
+    		 if(agentList.get(j).getAgentID() == agentID)
+    		 {
+    			 agentList.get(j).addBonusOffence(20);
+    			 agentList.get(j).addBonusDefence(10);
+    		 }
+         }
+    }
 	
 }

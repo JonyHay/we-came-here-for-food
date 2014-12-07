@@ -20,9 +20,9 @@ import game2D.BadCloser;
 public class Game extends GameCore {
 
 	private static Animation wMapAni, wMap2Ani, tThemeAni, bThemeAni,
-			cityGreenAni, cityYellowAni, cityRedAni;
+			cityGreenAni, cityYellowAni, cityRedAni, aniGrandma;
 	private static Sprite wMap, wMap2, tTheme, bTheme, cityGreen, cityYellow,
-			cityRed;
+			cityRed, sprtGrandma;
 	private static Game game;
 
 	private static int gameWindowX, gameWindowY;
@@ -89,7 +89,13 @@ public class Game extends GameCore {
 
 	private Situations situations;
 
-	private boolean alertMode = false;
+	public boolean alertMode = false;
+	
+	public void noAlert() {
+		
+		alertMode = false;
+		
+	}
 
 	public static void main(String[] args) {
 		game = new Game();
@@ -224,20 +230,24 @@ public class Game extends GameCore {
 		farfarRightBoxSizeY = farRightBoxSizeY;
 		farfarRightBoxArcX = 20;
 		farfarRightBoxArcY = 20;
+		
+		aniGrandma = new Animation();
+		aniGrandma.addFrame(Toolkit.getDefaultToolkit().createImage("res/crazywoman.png"), 1000);
+		sprtGrandma = new Sprite(aniGrandma);
 
 		// Transparent Effect
 		transpColor = new Color(0, 0, 0, 0.5f);
 		fadeLine = Toolkit.getDefaultToolkit().createImage("res/line.png");
 
 		// // Sound
-		// Sound s = new Sound("res/music.wav");
-		// s.start();
+		Sound s = new Sound("res/music.wav");
+		//s.start();
 
 		// Cities
 		cities = new Cities();
 		agentHandler = new AgentHandler();
 
-		mouseHandler = new MouseHandler(cities, rings);
+		mouseHandler = new MouseHandler(cities, rings, this);
 		this.addMouseListener(mouseHandler);
 
 		bank = new Money(10000);
@@ -525,7 +535,8 @@ public class Game extends GameCore {
 
 		if (situations.isAlert()) {
 			System.err.println(situations.getMessage());
-			//alertMode = true;
+			alertMode = true;
+			new Sound("res/ring.wav").start();
 		}
 
 		// Update the info shown in the select panel
@@ -551,8 +562,6 @@ public class Game extends GameCore {
 			txtInfectedPercentage = "";
 
 		}
-
-		if (!alertMode) {
 
 			// Update the rings
 			ListIterator<Ring> li = rings.listIterator();
@@ -644,7 +653,7 @@ public class Game extends GameCore {
 			if (wMap2.getX() + (gameWindowX - 15) <= 0) {
 				wMap2.setX(gameWindowX - 15);
 			}
-		}
+		
 
 	}
 
@@ -723,6 +732,8 @@ public class Game extends GameCore {
 			}
 
 		}
+		
+		messageOverlay(g);
 
 		noiseOverlay(g);
 
@@ -744,7 +755,7 @@ public class Game extends GameCore {
 				Graphics2D g2 = noiseMaps[i].createGraphics();
 				for (int x = 0; x < gameWindowX / 2; x += 2) {
 					for (int y = 0; y < gameWindowY / 2; y += 2) {
-						float f = r.nextFloat() * 0.1f;
+						float f = r.nextFloat() * 0.2f;
 						g2.setColor(new Color(0, 0, 0, f));
 						g2.fillRect(x, y, 2, 2);
 					}
@@ -759,6 +770,33 @@ public class Game extends GameCore {
 		g.drawImage(noiseMaps[r.nextInt(mapCount)], 0, 0, gameWindowX,
 				gameWindowY, this);
 
+	}
+	
+	private void messageOverlay(Graphics2D g) {
+		
+		if (!alertMode) return;
+		
+		g.setColor(new Color(0, 0, 0, 0.6f));
+		g.fillRoundRect(40, 140, 1290, 415, 90, 90);
+		
+		g.drawImage(sprtGrandma.getImage(), 900, 125, 360, 390, this);
+		
+		g.setColor(Color.WHITE);
+		g.setFont(new Font("TimesRoman", Font.BOLD, 48));
+		g.drawString("Incoming Message ...", 120, 220);
+		
+		g.setFont(new Font("TimesRoman", Font.ITALIC, 40));
+		g.drawString("from Agent Debbie Brown", 180, 270);
+		
+		g.setFont(new Font("TimesRoman", Font.PLAIN, 50));
+		int y = 300;
+		String m = "\"" + situations.getMessage() + "\"";
+		for (String line : m.split("\n"))
+	        g.drawString(line, 120, y += g.getFontMetrics().getHeight());
+		
+		g.setFont(new Font("TimesRoman", Font.BOLD, 28));
+		g.drawString("I'M ON IT!", 640, 530);
+		
 	}
 
 	private BufferedImage[] noiseMaps;

@@ -12,12 +12,14 @@ public class MouseHandler implements MouseListener {
 	private Cities cities;
 	private int selectedCity;
 	private ArrayList<Ring> rings;
+	private Game tg;
 	
-	public MouseHandler(Cities c, ArrayList<Ring> r) {
+	public MouseHandler(Cities c, ArrayList<Ring> r, Game a) {
 		
 		selectedCity = -1;
 		cities = c;
 		rings = r;
+		tg = a;
 		
 	}
 	
@@ -37,32 +39,40 @@ public class MouseHandler implements MouseListener {
 	public void mouseClicked(MouseEvent e) {
 		
 		System.out.println("*Clicked at " + e.getX() + "/" + e.getY());
-		rings.add(new Ring(e.getX(), e.getY()));
 		int rnd = new Random().nextInt(3);
 		new Sound("res/blim" + rnd + ".wav").start();
 		
-		int cityCount = cities.getNumberOfCities();
-		
-		// Calculate closest
-		if (e.getY() < 595) {
-			selectedCity = -1;
-			float nearestDistance = 25000.0f;
+		if (tg.alertMode) {
 			
-			for (int i = 0; i < cityCount; i++) {
+			tg.alertMode = false;
+			
+		} else {
+		
+			int cityCount = cities.getNumberOfCities();
+			
+			// Calculate closest
+			if (e.getY() < 595) {
+				rings.add(new Ring(e.getX(), e.getY()));
+				selectedCity = -1;
+				float nearestDistance = 25000.0f;
 				
-				City city = cities.getCityByIndex(i);
-				float distance = calculateDistance((int)city.getX(), (int)city.getY(), e.getX(), e.getY());
-				
-				if (distance < 0) distance = distance * (-1);
-				
-				if (distance < nearestDistance && distance < 40) {
-					selectedCity = i;
-					nearestDistance = distance;
+				for (int i = 0; i < cityCount; i++) {
+					
+					City city = cities.getCityByIndex(i);
+					float distance = calculateDistance((int)city.getX(), (int)city.getY(), e.getX(), e.getY());
+					
+					if (distance < 0) distance = distance * (-1);
+					
+					if (distance < nearestDistance && distance < 40) {
+						selectedCity = i;
+						nearestDistance = distance;
+					}
+					
 				}
 				
+				System.out.println("*Selected " + selectedCity);
 			}
 			
-			System.out.println("*Selected " + selectedCity);
 		}
 		
 	}

@@ -31,7 +31,7 @@ public class City extends Sprite {
 
 	public void increaseInfection() {
 		if (infectionRate < maxInfection)
-			infectionRate += 0.5f;
+			infectionRate += 0.25f;
 		else
 			infectionRate = maxInfection;
 	}
@@ -45,7 +45,7 @@ public class City extends Sprite {
 
 	public void decreaseInfection() {
 		if (infectionRate >= 0)
-			infectionRate -= 0.5f;
+			infectionRate -= 0.25f;
 		else
 			infectionRate = 0;
 	}
@@ -71,33 +71,19 @@ public class City extends Sprite {
 			if (zombies != 0)
 				increaseInfection();
 			
+
+			if (population == maxInfection - 1)
+			{
+				zombies += population - 1;
+				population = 0;
+			}
+			
 			timer = 0;
 		}
 		else if (timer < maxTimer)
 			timer++;
 	}
 
-	public void eliminatingZombies(int eliminatingRate) {
-		if (eliminatingRate != maxInfection) {
-			int elimination = zombies / maxInfection * eliminatingRate;
-			if (zombies - elimination >= 0)
-				zombies -= elimination;
-			else
-				zombies = 0;
-		}
-	}
-
-	public void eliminatingPeople(int eliminatingRate) {
-		if (eliminatingRate != maxInfection) {
-			int elimination = population / maxInfection * eliminatingRate;
-			if (population - elimination >= 0)
-				population -= elimination;
-			else
-				population = 0;
-		}
-	}
-
-	// TODO: finish
 	public void addAgents(ArrayList<Agent> a) {
 		if (a.size() != 0) {
 			for (int i = 0; i < a.size(); i++) {

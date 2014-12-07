@@ -16,6 +16,11 @@ public class City extends Sprite {
 
 	final private int maxInfection = 100; // max infection, elimination
 
+	private int timer = 0;
+	final private int maxTimer = 5;
+	
+	
+
 	public City(String name, int population, int zombies, Animation a) {
 		super(a);
 		cityName = name;
@@ -53,11 +58,14 @@ public class City extends Sprite {
 	}
 
 	public void updateInfection() {
-		if (zombies > 0)
+		if ((zombies > 0) && (timer == maxTimer))
 		{
+			
 			int infection = (int) ((int) Math.random() * infectionRate + 1);
+			
 			infection = population / maxInfection * infection;
 			zombies += infection;
+			
 			if (population - infection >= 0)
 				population -= infection;
 			else
@@ -65,7 +73,11 @@ public class City extends Sprite {
 	
 			if (zombies != 0)
 				increaseInfection();
+			
+			timer = 0;
 		}
+		else if (timer < maxTimer)
+			timer++;
 	}
 
 	public void eliminatingZombies(int eliminatingRate) {

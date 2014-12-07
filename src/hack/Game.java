@@ -1,6 +1,7 @@
 package hack;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Toolkit;
@@ -42,23 +43,16 @@ public class Game extends GameCore {
 	private static 	int 		hpMax;
 	private 		int			hp;
 	
-//	private static String 		cityGreenName, cityYellowName, cityRedName;
-//	private static int 			citySizeX, citySizeY;
-//	private static int 			city1OffsetX, city1OffsetY, city2OffsetX, city2OffsetY, city3OffsetX, city3OffsetY, 
-//								city4OffsetX, city4OffsetY, city5OffsetX, city5OffsetY, city6OffsetX, city6OffsetY,
-//								city7OffsetX, city7OffsetY, city8OffsetX, city8OffsetY, city9OffsetX, city9OffsetY;
-	
-	private static Color		botBoxColor;
-	private static int 			botLeftBoxOffsetX, botLeftBoxOffsetY, botLeftBoxSizeX, botLeftBoxSizeY, botLeftBoxArcX, botLeftBoxArcY;
-	private static int 			botMidBoxOffsetX, botMidBoxOffsetY, botMidBoxSizeX, botMidBoxSizeY, botMidBoxArcX, botMidBoxArcY;
-	private static int 			botRightBoxOffsetX, botRightBoxOffsetY, botRightBoxSizeX, botRightBoxSizeY, botRightBoxArcX, botRightBoxArcY;
+	private static 	Color		botBoxColor;
+	private static 	int 		botLeftBoxOffsetX, botLeftBoxOffsetY, botLeftBoxSizeX, botLeftBoxSizeY, botLeftBoxArcX, botLeftBoxArcY;
+	private static 	int 		botMidBoxOffsetX, botMidBoxOffsetY, botMidBoxSizeX, botMidBoxSizeY, botMidBoxArcX, botMidBoxArcY;
+	private static 	int 		botRightBoxOffsetX, botRightBoxOffsetY, botRightBoxSizeX, botRightBoxSizeY, botRightBoxArcX, botRightBoxArcY;
 							
-	private Color transpColor;
+	private 	  	Color 		transpColor;
+	private 	   	Image 		fadeLine;
 	
-	private Image fadeLine;
-	
-	private Cities cities;
-	private AgentHandler agentHandler;
+	private 		Cities 			cities;
+	private 		AgentHandler	agentHandler;
 
 	public static void main(String[] args) 
 	{ 
@@ -69,18 +63,8 @@ public class Game extends GameCore {
 	}
 	
 	public void init()
-	{
-		
-		Sound s = new Sound("res/music.wav");
-		s.start();
-		
-		cities = new Cities();
-		agentHandler = new AgentHandler();
-		
-		transpColor = new Color(0, 0, 0, 0.5f);
-		
-		fadeLine = Toolkit.getDefaultToolkit().createImage("res/line.png");
-		
+	{		
+		// Animation
 		wMapAni 			= new Animation();
 		tThemeAni 			= new Animation();
 		bThemeAni 			= new Animation();
@@ -88,30 +72,24 @@ public class Game extends GameCore {
 		cityYellowAni 		= new Animation();
 		cityRedAni 			= new Animation();
 		
+		// Map
 		mapName 			= "res/wMap.jpg";
-//		mapName 			= "res/wMap.png"; 
 		themeName 			= "res/theme.jpg";
-//		cityGreenName 		= "res/green.png";
-//		cityYellowName 		= "res/yellow.png";
-//		cityRedName 		= "res/red.png";
 		
 		wMapAni.addFrame(Toolkit.getDefaultToolkit().createImage(mapName), 10); // 10 is just a filler number
 		tThemeAni.addFrame(Toolkit.getDefaultToolkit().createImage(themeName), 10);
 		bThemeAni.addFrame(Toolkit.getDefaultToolkit().createImage(themeName), 10);
-//		cityGreenAni.addFrame(Toolkit.getDefaultToolkit().createImage(cityGreenName), 10);
-//		cityYellowAni.addFrame(Toolkit.getDefaultToolkit().createImage(cityYellowName), 10);
-//		cityRedAni.addFrame(Toolkit.getDefaultToolkit().createImage(cityRedName), 10);
 		
+		// Sprite
 		wMap 				= new Sprite(wMapAni);
 		tTheme 				= new Sprite(tThemeAni);
 		bTheme	 			= new Sprite(bThemeAni);
-//		cityGreen 			= new Sprite(cityGreenAni);
-//		cityYellow 			= new Sprite(cityYellowAni);
-//		cityRed				= new Sprite(cityRedAni);
 		
+		// Game
 		gameWindowX 		= 1365; 
 		gameWindowY 		= 730;
 		
+		// Values
 		mapOffsetX 			= 8; 
 		mapOffsetY 			= 110; 
 		mapSizeX 			= 1349; 
@@ -143,7 +121,7 @@ public class Game extends GameCore {
 		
 		timeColor 			= Color.BLACK;
 		timeOffsetX 		= 650; 
-		timeOffsetY 		= 78;
+		timeOffsetY 		= 80;
 		timeBoxOffsetX 		= 590; 
 		timeBoxOffsetY 		= 50; 
 		timeBoxSizeX 		= 150; 
@@ -155,18 +133,11 @@ public class Game extends GameCore {
 		hpBoxColor 			= Color.BLACK;
 		hpBoxOffsetX 		= 1150; 
 		hpBoxOffsetY 		= 58; 
-		/*colorBoxSizeX 	= hp*/ 
 		hpBoxSizeY 			= 30;
 		hpBoxArcX 			= 20;
 		hpBoxArcY  			= 20;
 		hpMax 				= 150;
 		hp 					= hpMax;
-		
-//		citySizeX 			= 20;
-//		citySizeY 			= 20;
-//		
-//		city1OffsetX 		= 280;
-//		city1OffsetY 		= 240;
 		
 		botBoxColor 		= Color.BLACK;
 		botLeftBoxOffsetX 	= 30;
@@ -189,10 +160,21 @@ public class Game extends GameCore {
 		botRightBoxSizeY 	= botMidBoxSizeY;
 		botRightBoxArcX	 	= 20;
 		botRightBoxArcY  	= 20;
+		
+		// Transparent Effect
+		transpColor 		= new Color(0, 0, 0, 0.5f);
+		fadeLine 			= Toolkit.getDefaultToolkit().createImage("res/line.png");
 
+//		// Sound
+//		Sound s = new Sound("res/music.wav");
+//		s.start();
+		
+		// Cities
+		cities 				= new Cities();
+		agentHandler 		= new AgentHandler();
 	}
 	
-	public void updatetTheme(Graphics2D g)
+	public void drawtTheme(Graphics2D g)
 	{
 		for (int i = 0; i < 50; i++)
 		{
@@ -203,7 +185,7 @@ public class Game extends GameCore {
 		tThemeSizeX = tThemeSizeXInit;
 	}
 	
-	public void updatebTheme(Graphics2D g)
+	public void drawbTheme(Graphics2D g)
 	{
 		for (int i = 0; i < 50; i++)
 		{
@@ -213,7 +195,153 @@ public class Game extends GameCore {
 		bThemeOffsetX = bThemeOffsetXInit;
 		bThemeSizeX = bThemeSizeXInit;
 	}
+	
+	public void drawMoney(Graphics2D g)
+	{
+		g.setColor(transpColor);
+		g.fillRoundRect(moneyBoxOffsetX, moneyBoxOffsetY, moneyBoxSizeX, moneyBoxSizeY, moneyBoxArcX, moneyBoxArcY);
+		g.setColor(Color.WHITE);
+		g.setFont(new Font("TimesRoman", Font.PLAIN, 20));
+		g.drawString("Money", moneyOffsetX, moneyOffsetY);
+		g.setColor(moneyColor);
+		g.drawRoundRect(moneyBoxOffsetX, moneyBoxOffsetY, moneyBoxSizeX, moneyBoxSizeY, moneyBoxArcX, moneyBoxArcY);
+		g.drawRoundRect(moneyBoxOffsetX + 1, moneyBoxOffsetY + 1, moneyBoxSizeX - 2, moneyBoxSizeY - 2, moneyBoxArcX, moneyBoxArcY);
+		g.drawRoundRect(moneyBoxOffsetX + 2, moneyBoxOffsetY + 2, moneyBoxSizeX - 4, moneyBoxSizeY - 4, moneyBoxArcX, moneyBoxArcY);
+	}
+	
+	public void drawTime(Graphics2D g)
+	{
+		g.setColor(transpColor);
+		g.fillRoundRect(timeBoxOffsetX, timeBoxOffsetY, timeBoxSizeX, timeBoxSizeY, timeBoxArcX, timeBoxArcY);
+		g.setColor(Color.WHITE);
+		g.setFont(new Font("TimesRoman", Font.PLAIN, 20));
+		g.drawString("Time", timeOffsetX, timeOffsetY);
+		g.setColor(timeColor);
+		g.drawRoundRect(timeBoxOffsetX, timeBoxOffsetY, timeBoxSizeX, timeBoxSizeY, timeBoxArcX, timeBoxArcY);
+		g.drawRoundRect(timeBoxOffsetX + 1, timeBoxOffsetY + 1, timeBoxSizeX - 2, timeBoxSizeY - 2, timeBoxArcX, timeBoxArcY);
+		g.drawRoundRect(timeBoxOffsetX + 2, timeBoxOffsetY + 2, timeBoxSizeX - 4, timeBoxSizeY - 4, timeBoxArcX, timeBoxArcY);
+	}
+	
+	public void drawHP(Graphics2D g)
+	{
+		g.setColor(Color.BLACK);
+		g.fillRoundRect(hpBoxOffsetX, hpBoxOffsetY, hpMax, hpBoxSizeY, hpBoxArcX, hpBoxArcY);
+		g.setColor(hpBoxColor);
+		g.drawRoundRect(hpBoxOffsetX, hpBoxOffsetY, hpMax, hpBoxSizeY, hpBoxArcX, hpBoxArcY);
+		g.drawRoundRect(hpBoxOffsetX + 1, hpBoxOffsetY + 1, hpMax - 2, hpBoxSizeY - 2, hpBoxArcX, hpBoxArcY);
+		g.drawRoundRect(hpBoxOffsetX + 2, hpBoxOffsetY + 2, hpMax - 4, hpBoxSizeY - 4, hpBoxArcX, hpBoxArcY);
+		g.setColor(hpColor);
+		g.fillRoundRect(hpBoxOffsetX + 3, hpBoxOffsetY + 3, hp - 6, hpBoxSizeY - 5, hpBoxArcX, hpBoxArcY);
+	}
+	
+	public void drawBotLeft(Graphics2D g)
+	{
+		g.setColor(transpColor);
+		g.fillRoundRect(botLeftBoxOffsetX, botLeftBoxOffsetY, botLeftBoxSizeX, botLeftBoxSizeY, botLeftBoxArcX, botLeftBoxArcY);
+		g.setColor(botBoxColor);
+		g.drawRoundRect(botLeftBoxOffsetX, botLeftBoxOffsetY, botLeftBoxSizeX, botLeftBoxSizeY, botLeftBoxArcX, botLeftBoxArcY);
+		g.drawRoundRect(botLeftBoxOffsetX + 1, botLeftBoxOffsetY + 1, botLeftBoxSizeX - 2, botLeftBoxSizeY - 2, botLeftBoxArcX, botLeftBoxArcY);
+		g.drawRoundRect(botLeftBoxOffsetX + 2, botLeftBoxOffsetY + 2, botLeftBoxSizeX - 4, botLeftBoxSizeY - 4, botLeftBoxArcX, botLeftBoxArcY);
+	}
 
+	public void drawBotMid(Graphics2D g)
+	{
+		g.setColor(transpColor);
+		g.fillRoundRect(botMidBoxOffsetX, botMidBoxOffsetY, botMidBoxSizeX, botMidBoxSizeY, botMidBoxArcX, botMidBoxArcY);
+		g.setColor(botBoxColor);
+		g.drawRoundRect(botMidBoxOffsetX, botMidBoxOffsetY, botMidBoxSizeX, botMidBoxSizeY, botMidBoxArcX, botMidBoxArcY);
+		g.drawRoundRect(botMidBoxOffsetX + 1, botMidBoxOffsetY + 1, botMidBoxSizeX - 2, botMidBoxSizeY - 2, botMidBoxArcX, botMidBoxArcY);
+		g.drawRoundRect(botMidBoxOffsetX + 2, botMidBoxOffsetY + 2, botMidBoxSizeX - 4, botMidBoxSizeY - 4, botMidBoxArcX, botMidBoxArcY);
+	}
+	
+	public void drawBotRight(Graphics2D g)
+	{
+		g.setColor(transpColor);
+		g.fillRoundRect(botRightBoxOffsetX, botRightBoxOffsetY, botRightBoxSizeX, botRightBoxSizeY, botRightBoxArcX, botRightBoxArcY);
+		g.setColor(botBoxColor);
+		g.drawRoundRect(botRightBoxOffsetX, botRightBoxOffsetY, botRightBoxSizeX, botRightBoxSizeY, botRightBoxArcX, botRightBoxArcY);
+		g.drawRoundRect(botRightBoxOffsetX + 1, botRightBoxOffsetY + 1, botRightBoxSizeX - 2, botRightBoxSizeY - 2, botRightBoxArcX, botRightBoxArcY);
+		g.drawRoundRect(botRightBoxOffsetX + 2, botRightBoxOffsetY + 2, botRightBoxSizeX - 4, botRightBoxSizeY - 4, botRightBoxArcX, botRightBoxArcY);
+	}
+	
+	public void drawTransparency(Graphics2D g)
+	{
+		g.drawImage(fadeLine, 0, mapOffsetY - 1, 1400, 20, this);
+		g.drawImage(fadeLine, 0, mapOffsetY - 1, 1400, -3, this);
+		g.drawImage(fadeLine, 0, mapOffsetY + mapSizeY + 1, 1400, -20, this);
+		g.drawImage(fadeLine, 0, mapOffsetY + mapSizeY + 1, 1400, 3, this);
+	}
+	
+	private void drawCityIcons(Graphics2D g) 
+	{
+		int cityCount = cities.getNumberOfCities();
+		for (int i = 0; i < cityCount; i++) 
+		{
+			City c = cities.getCityByIndex(i);
+			g.drawImage(c.getImage(), (int)c.getX(), (int)c.getY(), c.getWidth(), c.getHeight(), this); 	
+		}
+		
+	}
+	
+	private void drawMacOutline(Graphics2D g)
+	{
+		g.setColor(Color.BLACK);
+		g.fillRect(0, 0, 1400, 30);
+		g.fillRect(0, 722, 1400, 30);
+		g.fillRect(0, 0, 8, 1000);
+		g.fillRect(1357, 0, 8, 1000);
+	}
+	
+	private void drawBotLeftDetails(Graphics2D g)
+	{
+		g.setColor(Color.WHITE);
+		g.setFont(new Font("TimesRoman", Font.PLAIN, 20));
+		g.drawString("City Name: ", botLeftBoxOffsetX + 30, botLeftBoxOffsetY + 30);
+		g.drawString("Human Population: ", botLeftBoxOffsetX + 30, botLeftBoxOffsetY + 55);
+		g.drawString("Infected Population: ", botLeftBoxOffsetX + 30, botLeftBoxOffsetY + 80);
+		
+		int zombieBoxOffSetX = 260, zombieBoxOffSetY = 667;
+		g.setColor(hpBoxColor);
+		g.drawRoundRect(zombieBoxOffSetX, zombieBoxOffSetY, hpMax, hpBoxSizeY, hpBoxArcX, hpBoxArcY);
+		g.drawRoundRect(zombieBoxOffSetX + 1, zombieBoxOffSetY + 1, hpMax - 2, hpBoxSizeY - 2, hpBoxArcX, hpBoxArcY);
+		g.drawRoundRect(zombieBoxOffSetX + 2, zombieBoxOffSetY + 2, hpMax - 4, hpBoxSizeY - 4, hpBoxArcX, hpBoxArcY);
+		g.setColor(Color.RED);
+		g.fillRoundRect(zombieBoxOffSetX + 3, zombieBoxOffSetY + 3, hp - 6, hpBoxSizeY - 5, hpBoxArcX, hpBoxArcY);
+	}
+	
+	private void drawBotMidDetails(Graphics2D g)
+	{
+		g.setColor(Color.WHITE);
+		// Horizontal Lines
+		for (int i = 1; i <= 2; i++)
+		{
+			g.drawLine(botMidBoxOffsetX + 3, (botMidBoxOffsetY + 3) + i*(botMidBoxSizeY - 4)/3, botMidBoxOffsetX + botMidBoxSizeX - 3, (botMidBoxOffsetY + 3) + i*(botMidBoxSizeY - 4)/3);
+		}
+		
+		// Vertical Lines
+		for (int i = 1; i <= 4; i++)
+		{
+			g.drawLine((botMidBoxOffsetX + 3) + i*(botMidBoxSizeX - 4)/5, botMidBoxOffsetY + 3, (botMidBoxOffsetX + 3) + i*(botMidBoxSizeX - 4)/5, (botMidBoxOffsetY + 3) + (botMidBoxSizeY - 6));
+		}
+	}
+	
+	private void drawBotRightDetails(Graphics2D g)
+	{
+		g.setColor(Color.WHITE);
+		// Horizontal Lines
+		for (int i = 1; i <= 2; i++)
+		{
+			g.drawLine(botRightBoxOffsetX + 3, (botRightBoxOffsetY + 3) + i*(botRightBoxSizeY - 4)/3, botRightBoxOffsetX + botRightBoxSizeX - 3, (botRightBoxOffsetY + 3) + i*(botRightBoxSizeY - 4)/3);
+		}
+		
+		// Vertical Lines
+		for (int i = 1; i <= 4; i++)
+		{
+			g.drawLine((botRightBoxOffsetX + 3) + i*(botRightBoxSizeX - 4)/5, botRightBoxOffsetY + 3, (botRightBoxOffsetX + 3) + i*(botRightBoxSizeX - 4)/5, (botRightBoxOffsetY + 3) + (botRightBoxSizeY - 6));
+		}
+		
+	}
+	
 	public void update(long elapsed) {
 		
 		int cityCount = cities.getNumberOfCities();
@@ -253,96 +381,53 @@ public class Game extends GameCore {
 		g.drawImage(wMapAni.getImage(), mapOffsetX, mapOffsetY, mapSizeX, mapSizeY, this); //need to generalise screen pixels for any given monitor	
 						
 		// Top Theme
-		updatetTheme(g);
+		drawtTheme(g);
 		
 		// Time
-		g.setColor(transpColor);
-		g.fillRoundRect(timeBoxOffsetX, timeBoxOffsetY, timeBoxSizeX, timeBoxSizeY, timeBoxArcX, timeBoxArcY);
-		g.setColor(timeColor);
-		g.drawString("Time", timeOffsetX, timeOffsetY);
-		g.drawRoundRect(timeBoxOffsetX, timeBoxOffsetY, timeBoxSizeX, timeBoxSizeY, timeBoxArcX, timeBoxArcY);
-		g.drawRoundRect(timeBoxOffsetX + 1, timeBoxOffsetY + 1, timeBoxSizeX - 2, timeBoxSizeY - 2, timeBoxArcX, timeBoxArcY);
-		g.drawRoundRect(timeBoxOffsetX + 2, timeBoxOffsetY + 2, timeBoxSizeX - 4, timeBoxSizeY - 4, timeBoxArcX, timeBoxArcY);
+		drawTime(g);
 				
 		// Money
-		g.setColor(transpColor);
-		g.fillRoundRect(moneyBoxOffsetX, moneyBoxOffsetY, moneyBoxSizeX, moneyBoxSizeY, moneyBoxArcX, moneyBoxArcY);
-		g.setColor(moneyColor);
-		g.drawString("Money", moneyOffsetX, moneyOffsetY);
-		g.drawRoundRect(moneyBoxOffsetX, moneyBoxOffsetY, moneyBoxSizeX, moneyBoxSizeY, moneyBoxArcX, moneyBoxArcY);
-		g.drawRoundRect(moneyBoxOffsetX + 1, moneyBoxOffsetY + 1, moneyBoxSizeX - 2, moneyBoxSizeY - 2, moneyBoxArcX, moneyBoxArcY);
-		g.drawRoundRect(moneyBoxOffsetX + 2, moneyBoxOffsetY + 2, moneyBoxSizeX - 4, moneyBoxSizeY - 4, moneyBoxArcX, moneyBoxArcY);
+		drawMoney(g);
 		
 		// HP
-		g.setColor(Color.BLACK);
-		g.fillRoundRect(hpBoxOffsetX, hpBoxOffsetY, hpMax, hpBoxSizeY, hpBoxArcX, hpBoxArcY);
-		g.setColor(hpBoxColor);
-		g.drawRoundRect(hpBoxOffsetX, hpBoxOffsetY, hpMax, hpBoxSizeY, hpBoxArcX, hpBoxArcY);
-		g.drawRoundRect(hpBoxOffsetX + 1, hpBoxOffsetY + 1, hpMax - 2, hpBoxSizeY - 2, hpBoxArcX, hpBoxArcY);
-		g.drawRoundRect(hpBoxOffsetX + 2, hpBoxOffsetY + 2, hpMax - 4, hpBoxSizeY - 4, hpBoxArcX, hpBoxArcY);
-		g.setColor(hpColor);
-		g.fillRoundRect(hpBoxOffsetX + 3, hpBoxOffsetY + 3, hp - 6, hpBoxSizeY - 5, hpBoxArcX, hpBoxArcY);
+		drawHP(g);
 
 		// Bot Theme
-		updatebTheme(g);
-		
-//		// City 1
-//		g.drawImage(cityGreenAni.getImage(), city1OffsetX, city1OffsetY, citySizeX, citySizeY, this);
-		
+		drawbTheme(g);
+
 		// BotLeft Box
-		g.setColor(transpColor);
-		g.fillRoundRect(botLeftBoxOffsetX, botLeftBoxOffsetY, botLeftBoxSizeX, botLeftBoxSizeY, botLeftBoxArcX, botLeftBoxArcY);
-		g.setColor(botBoxColor);
-//		g.drawString("Left Box", botLeftBoxOffsetX, botLeftBoxOffsetY);
-		g.drawRoundRect(botLeftBoxOffsetX, botLeftBoxOffsetY, botLeftBoxSizeX, botLeftBoxSizeY, botLeftBoxArcX, botLeftBoxArcY);
-		g.drawRoundRect(botLeftBoxOffsetX + 1, botLeftBoxOffsetY + 1, botLeftBoxSizeX - 2, botLeftBoxSizeY - 2, botLeftBoxArcX, botLeftBoxArcY);
-		g.drawRoundRect(botLeftBoxOffsetX + 2, botLeftBoxOffsetY + 2, botLeftBoxSizeX - 4, botLeftBoxSizeY - 4, botLeftBoxArcX, botLeftBoxArcY);
+		drawBotLeft(g);
 		
 		// BotMid Box
-		g.setColor(transpColor);
-		g.fillRoundRect(botMidBoxOffsetX, botMidBoxOffsetY, botMidBoxSizeX, botMidBoxSizeY, botMidBoxArcX, botMidBoxArcY);
-		g.setColor(botBoxColor);
-		g.drawRoundRect(botMidBoxOffsetX, botMidBoxOffsetY, botMidBoxSizeX, botMidBoxSizeY, botMidBoxArcX, botMidBoxArcY);
-		g.drawRoundRect(botMidBoxOffsetX + 1, botMidBoxOffsetY + 1, botMidBoxSizeX - 2, botMidBoxSizeY - 2, botMidBoxArcX, botMidBoxArcY);
-		g.drawRoundRect(botMidBoxOffsetX + 2, botMidBoxOffsetY + 2, botMidBoxSizeX - 4, botMidBoxSizeY - 4, botMidBoxArcX, botMidBoxArcY);
+		drawBotMid(g);
 		
 		// BotRight Box
-		g.setColor(transpColor);
-		g.fillRoundRect(botRightBoxOffsetX, botRightBoxOffsetY, botRightBoxSizeX, botRightBoxSizeY, botRightBoxArcX, botRightBoxArcY);
-		g.setColor(botBoxColor);
-		g.drawRoundRect(botRightBoxOffsetX, botRightBoxOffsetY, botRightBoxSizeX, botRightBoxSizeY, botRightBoxArcX, botRightBoxArcY);
-		g.drawRoundRect(botRightBoxOffsetX + 1, botRightBoxOffsetY + 1, botRightBoxSizeX - 2, botRightBoxSizeY - 2, botRightBoxArcX, botRightBoxArcY);
-		g.drawRoundRect(botRightBoxOffsetX + 2, botRightBoxOffsetY + 2, botRightBoxSizeX - 4, botRightBoxSizeY - 4, botRightBoxArcX, botRightBoxArcY);
+		drawBotRight(g);
 		
-		g.drawImage(fadeLine, 0, mapOffsetY - 1, 1400, 20, this);
-		g.drawImage(fadeLine, 0, mapOffsetY - 1, 1400, -3, this);
-		g.drawImage(fadeLine, 0, mapOffsetY + mapSizeY + 1, 1400, -20, this);
-		g.drawImage(fadeLine, 0, mapOffsetY + mapSizeY + 1, 1400, 3, this);
+		// Apply transparency
+		drawTransparency(g);
+		
+		// Cities
+		drawCityIcons(g);		
+		
+		// macbook outline
+		drawMacOutline(g);
+		
+		/* 
+		 * City Info (Bot Left Box)
+		 * Need to implement MouseListener
+		*/
+		drawBotLeftDetails(g);
+		
+		drawBotMidDetails(g);
+		
+		drawBotRightDetails(g);
 		
 		
-		drawCityIcons(g);
 		
 		
-		g.setColor(Color.black);
-		g.fillRect(0, 0, 1400, 30);
-		g.fillRect(0, 722, 1400, 30);
-		g.fillRect(0, 0, 8, 1000);
-		g.fillRect(1357, 0, 8, 1000);
-		
-
-		// g.updated automatically called here	
 	}
 	
-	private void drawCityIcons(Graphics2D g) {
-		
-		int cityCount = cities.getNumberOfCities();
-		for (int i = 0; i < cityCount; i++) {
-			
-			City c = cities.getCityByIndex(i);
-			g.drawImage(c.getImage(), (int)c.getX(), (int)c.getY(), c.getWidth(), c.getHeight(), this); 
-			
-		}
-		
-	}
+
 	
 }

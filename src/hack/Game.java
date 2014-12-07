@@ -21,10 +21,10 @@ public class Game extends GameCore {
 
 	private static Animation wMapAni, wMap2Ani, tThemeAni, bThemeAni,
 			cityGreenAni, cityYellowAni, cityRedAni,
-			dollarAni;
+			dollarAni, medKitAni, bigGunsAni, cyberHandsAni;
 	private static Sprite wMap, wMap2, tTheme, bTheme, 
 			cityGreen, cityYellow, cityRed,
-			dollar;
+			dollar, medKit, bigGuns, cyberHands;
 	private static Game game;
 
 	private static int gameWindowX, gameWindowY;
@@ -115,6 +115,9 @@ public class Game extends GameCore {
 		cityYellowAni = new Animation();
 		cityRedAni = new Animation();
 		dollarAni = new Animation();
+		medKitAni = new Animation();
+		bigGunsAni = new Animation();
+		cyberHandsAni = new Animation();
 
 		// Map
 		mapName = "res/wMap.jpg";
@@ -133,6 +136,9 @@ public class Game extends GameCore {
 
 		imgZombies = Toolkit.getDefaultToolkit().createImage("res/zombies.jpg");
 		dollarAni.addFrame(Toolkit.getDefaultToolkit().createImage("res/dollar-sign.png"), 10);
+		medKitAni.addFrame(Toolkit.getDefaultToolkit().createImage("res/betterMed-Kits.png"), 10);
+		bigGunsAni.addFrame(Toolkit.getDefaultToolkit().createImage("res/BigGuns.png"), 10);
+		cyberHandsAni.addFrame(Toolkit.getDefaultToolkit().createImage("res/cyberneticImplants.png"), 10);
 
 		rings = new ArrayList<Ring>();
 
@@ -442,6 +448,12 @@ public class Game extends GameCore {
 					+ farfarRightBoxSizeX - 3, (farfarRightBoxOffsetY + 3) + i
 					* (farfarRightBoxSizeY - 4) / 3);
 		}
+		
+		// Updrades (medKit, bigGuns, cyberHands)
+		g.drawImage(medKitAni.getImage(), farfarRightBoxOffsetX + 20, farfarRightBoxOffsetY + 8, 20, 20, this);
+		g.drawImage(bigGunsAni.getImage(), farfarRightBoxOffsetX + 20, farfarRightBoxOffsetY + 41, 20, 20, this);
+		g.drawImage(cyberHandsAni.getImage(), farfarRightBoxOffsetX + 20, farfarRightBoxOffsetY + 74, 20, 20, this);
+		
 	}
 
 	public void drawTransparency(Graphics2D g) {

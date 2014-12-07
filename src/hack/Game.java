@@ -59,6 +59,8 @@ public class Game extends GameCore {
 	
 	private Cities cities;
 	private AgentHandler agentHandler;
+	
+	private MouseHandler mouseHandler;
 
 	public static void main(String[] args) 
 	{ 
@@ -80,6 +82,9 @@ public class Game extends GameCore {
 		transpColor = new Color(0, 0, 0, 0.5f);
 		
 		fadeLine = Toolkit.getDefaultToolkit().createImage("res/line.png");
+		
+		mouseHandler = new MouseHandler(cities);
+		this.addMouseListener(mouseHandler);
 		
 		wMapAni 			= new Animation();
 		tThemeAni 			= new Animation();
@@ -215,6 +220,8 @@ public class Game extends GameCore {
 	}
 
 	public void update(long elapsed) {
+		
+		//System.out.println("Selected: " + mouseHandler.getSelectedCityIndex());
 		
 		int cityCount = cities.getNumberOfCities();
 		int people = 0;

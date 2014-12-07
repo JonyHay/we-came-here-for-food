@@ -20,9 +20,11 @@ import game2D.BadCloser;
 public class Game extends GameCore {
 
 	private static Animation wMapAni, wMap2Ani, tThemeAni, bThemeAni,
-			cityGreenAni, cityYellowAni, cityRedAni;
-	private static Sprite wMap, wMap2, tTheme, bTheme, cityGreen, cityYellow,
-			cityRed;
+			cityGreenAni, cityYellowAni, cityRedAni,
+			dollarAni;
+	private static Sprite wMap, wMap2, tTheme, bTheme, 
+			cityGreen, cityYellow, cityRed,
+			dollar;
 	private static Game game;
 
 	private static int gameWindowX, gameWindowY;
@@ -90,6 +92,10 @@ public class Game extends GameCore {
 	private Situations situations;
 
 	private boolean alertMode = false;
+	
+	private long taxElapsed = 0;
+	
+	private BufferedImage[] noiseMaps;
 
 	public static void main(String[] args) {
 		game = new Game();
@@ -108,6 +114,7 @@ public class Game extends GameCore {
 		cityGreenAni = new Animation();
 		cityYellowAni = new Animation();
 		cityRedAni = new Animation();
+		dollarAni = new Animation();
 
 		// Map
 		mapName = "res/wMap.jpg";
@@ -125,6 +132,7 @@ public class Game extends GameCore {
 				10);
 
 		imgZombies = Toolkit.getDefaultToolkit().createImage("res/zombies.jpg");
+		dollarAni.addFrame(Toolkit.getDefaultToolkit().createImage("res/dollar-sign.png"), 10);
 
 		rings = new ArrayList<Ring>();
 
@@ -138,6 +146,7 @@ public class Game extends GameCore {
 		wMap2.setX(gameWindowX - 15);
 		tTheme = new Sprite(tThemeAni);
 		bTheme = new Sprite(bThemeAni);
+		dollar = new Sprite(dollarAni);
 
 		// Values
 		mapOffsetX = 8;
@@ -394,6 +403,18 @@ public class Game extends GameCore {
 					+ farRightBoxSizeX - 3, (farRightBoxOffsetY + 3) + i
 					* (farRightBoxSizeY - 4) / 3);
 		}
+		
+		// Dollar Sign
+		g.drawImage(dollarAni.getImage(), farRightBoxOffsetX + 8, farRightBoxOffsetY + 8, 20, 20, this);
+		g.drawImage(dollarAni.getImage(), farRightBoxOffsetX + 8, farRightBoxOffsetY + 41, 20, 20, this);
+		g.drawImage(dollarAni.getImage(), farRightBoxOffsetX + 8, farRightBoxOffsetY + 74, 20, 20, this);
+		
+		g.setColor(Color.WHITE);
+		g.setFont(new Font("TimesRoman", Font.PLAIN, 20));
+		g.drawString("Buy Offence", farRightBoxOffsetX + 65, farRightBoxOffsetY + 24);
+		g.drawString("Buy Defence", farRightBoxOffsetX + 65, farRightBoxOffsetY + 57);
+		g.drawString("Buy Medic", farRightBoxOffsetX + 65, farRightBoxOffsetY + 90);
+
 	}
 
 	public void drawFarFarRight(Graphics2D g) {
@@ -515,6 +536,39 @@ public class Game extends GameCore {
 					* (botRightBoxSizeX - 4) / 5, (botRightBoxOffsetY + 3)
 					+ (botRightBoxSizeY - 6));
 		}
+
+	}
+	
+	private void noiseOverlay(Graphics2D g) {
+
+		Random r = new Random();
+		int mapCount = 3;
+
+		if (noiseMaps == null) {
+
+			noiseMaps = new BufferedImage[mapCount];
+
+			for (int i = 0; i < mapCount; i++) {
+				System.out.println("Generating map " + i);
+				noiseMaps[i] = new BufferedImage(gameWindowX / 2,
+						gameWindowY / 2, BufferedImage.TYPE_INT_ARGB);
+				Graphics2D g2 = noiseMaps[i].createGraphics();
+				for (int x = 0; x < gameWindowX / 2; x += 2) {
+					for (int y = 0; y < gameWindowY / 2; y += 2) {
+						float f = r.nextFloat() * 0.1f;
+						g2.setColor(new Color(0, 0, 0, f));
+						g2.fillRect(x, y, 2, 2);
+					}
+				}
+
+			}
+
+			System.out.println("Generated noise maps.");
+
+		}
+
+		g.drawImage(noiseMaps[r.nextInt(mapCount)], 0, 0, gameWindowX,
+				gameWindowY, this);
 
 	}
 
@@ -648,7 +702,7 @@ public class Game extends GameCore {
 
 	}
 
-	private long taxElapsed = 0;
+
 
 	public void draw(Graphics2D g) {
 		// Map
@@ -728,39 +782,6 @@ public class Game extends GameCore {
 
 	}
 
-	private void noiseOverlay(Graphics2D g) {
 
-		Random r = new Random();
-		int mapCount = 3;
-
-		if (noiseMaps == null) {
-
-			noiseMaps = new BufferedImage[mapCount];
-
-			for (int i = 0; i < mapCount; i++) {
-				System.out.println("Generating map " + i);
-				noiseMaps[i] = new BufferedImage(gameWindowX / 2,
-						gameWindowY / 2, BufferedImage.TYPE_INT_ARGB);
-				Graphics2D g2 = noiseMaps[i].createGraphics();
-				for (int x = 0; x < gameWindowX / 2; x += 2) {
-					for (int y = 0; y < gameWindowY / 2; y += 2) {
-						float f = r.nextFloat() * 0.1f;
-						g2.setColor(new Color(0, 0, 0, f));
-						g2.fillRect(x, y, 2, 2);
-					}
-				}
-
-			}
-
-			System.out.println("Generated noise maps.");
-
-		}
-
-		g.drawImage(noiseMaps[r.nextInt(mapCount)], 0, 0, gameWindowX,
-				gameWindowY, this);
-
-	}
-
-	private BufferedImage[] noiseMaps;
 
 }

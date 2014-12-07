@@ -53,6 +53,8 @@ public class Game extends GameCore {
 	
 	private 		Cities 			cities;
 	private 		AgentHandler	agentHandler;
+	
+	private MouseHandler mouseHandler;
 
 	public static void main(String[] args) 
 	{ 
@@ -172,6 +174,11 @@ public class Game extends GameCore {
 		// Cities
 		cities 				= new Cities();
 		agentHandler 		= new AgentHandler();
+		
+		mouseHandler = new MouseHandler(cities);
+		this.addMouseListener(mouseHandler);
+		
+		
 	}
 	
 	public void drawtTheme(Graphics2D g)
@@ -296,9 +303,9 @@ public class Game extends GameCore {
 	{
 		g.setColor(Color.WHITE);
 		g.setFont(new Font("TimesRoman", Font.PLAIN, 20));
-		g.drawString("City Name: ", botLeftBoxOffsetX + 30, botLeftBoxOffsetY + 30);
-		g.drawString("Human Population: ", botLeftBoxOffsetX + 30, botLeftBoxOffsetY + 55);
-		g.drawString("Infected Population: ", botLeftBoxOffsetX + 30, botLeftBoxOffsetY + 80);
+		g.drawString(txtCityName, botLeftBoxOffsetX + 30, botLeftBoxOffsetY + 30);
+		g.drawString(txtHumanPopulation, botLeftBoxOffsetX + 30, botLeftBoxOffsetY + 55);
+		g.drawString(txtInfectedPopulation, botLeftBoxOffsetX + 30, botLeftBoxOffsetY + 80);
 		
 		int zombieBoxOffSetX = 260, zombieBoxOffSetY = 667;
 		g.setColor(hpBoxColor);
@@ -308,6 +315,8 @@ public class Game extends GameCore {
 		g.setColor(Color.RED);
 		g.fillRoundRect(zombieBoxOffSetX + 3, zombieBoxOffSetY + 3, hp - 6, hpBoxSizeY - 5, hpBoxArcX, hpBoxArcY);
 	}
+	
+	private String txtCityName = "", txtHumanPopulation, txtInfectedPopulation;
 	
 	private void drawBotMidDetails(Graphics2D g)
 	{
@@ -359,19 +368,42 @@ public class Game extends GameCore {
 			people += c.getPopulation();
 			zombies += c.getZombieNumber();
 			
-			float cityHealth = (float) c.getZombieNumber() / (float) c.getPopulation();
-			c.setAnimation(cities.animations[0]);
-			if (cityHealth > 0.2f) {
-				c.setAnimation(cities.animations[1]);
+			float cityHealth = 1 / ((float) c.getZombieNumber() / (float) c.getPopulation());
+			
+			if (cityHealth > 0.75f && cityHealth <= 1.0f) {
+				cities.getCityByIndex(i).setAnimation(cities.animations[0]);
 			}
-			if (cityHealth > 0.6f) {
-				c.setAnimation(cities.animations[2]);
+			
+			if (cityHealth > 0.25f && cityHealth <= 0.75f) {
+				cities.getCityByIndex(i).setAnimation(cities.animations[1]);
+			}
+			
+			if (cityHealth >= 0.0f && cityHealth <= 0.25f) {
+				cities.getCityByIndex(i).setAnimation(cities.animations[2]);
 			}
 			
 		}
 		
 		float health = (float) zombies / (float) people;
 		hp = hpMax - (int) health;
+		if (hp < 0) hp = 0;
+		
+		
+		// Update the info shown in the select panel
+		if (mouseHandler.getSelectedCityIndex() >= 0) {
+			
+			City selCity = cities.getCityByIndex(mouseHandler.getSelectedCityIndex());
+			txtCityName = selCity.getCityName();
+			txtHumanPopulation = "Population " + selCity.getPopulation();
+			txtInfectedPopulation = "" + selCity.getZombieNumber() + " Infected";
+			
+		} else {
+			
+			txtCityName = "";
+			txtHumanPopulation = "";
+			txtInfectedPopulation = "";
+			
+		}
 
 	}
 

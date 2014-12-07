@@ -36,14 +36,14 @@ public class Cities {
 		// city 2 Istanbul
 		zombies = 0;
 		cities[1] = new City("Istanbul", 550000, zombies, a);
-		cities[1].setX(647);
-		cities[1].setY(385);
+		cities[1].setX(770);
+		cities[1].setY(230);
 
 		// city 3 Moscow
 		zombies = 0;
 		cities[2] = new City("Moscow", 12000000, zombies, a);
-		cities[2].setX(647);
-		cities[2].setY(250);
+		cities[2].setX(950);
+		cities[2].setY(200);
 		
 		// city 4 Tokyo
 		zombies = 30;
@@ -54,18 +54,26 @@ public class Cities {
 		// city 5 Delhi
 		zombies = 0;
 		cities[4] = new City("Delhi", 11000000, zombies, a);
+		cities[4].setX(950);
+		cities[4].setY(260);
 		
 		// city 6 Sao Paulo
 		zombies = 0;
 		cities[5] = new City("Sao Paulo", 11000000, zombies, a);
+		cities[5].setX(480);
+		cities[5].setY(400);
 		
-		// city 7 Limo
+		// city 7 Lima
 		zombies = 20;
-		cities[6] = new City("Limo", 7600000, zombies, a);
+		cities[6] = new City("Lima", 7600000, zombies, a);
+		cities[6].setX(400);
+		cities[6].setY(380);
 		
-		// city 8 Mexico
+		// city 8 Mexico City
 		zombies = 0;
-		cities[7] = new City("Mexico", 11000000, zombies, a);
+		cities[7] = new City("Mexico City", 11000000, zombies, a);
+		cities[7].setX(275);
+		cities[7].setY(246);
 		
 		// city 9 New York
 		zombies = 5;
@@ -76,7 +84,8 @@ public class Cities {
 		// city 10 Lagos
 		zombies = 200;
 		cities[9] = new City("Lagos", 21000000, zombies, a);
-		
+		cities[9].setX(670);
+		cities[9].setY(314);
 		
 		// city 11 Cairo
 		zombies = 0;
@@ -87,6 +96,8 @@ public class Cities {
 		// city 12 Johannesburg
 		zombies = 9;
 		cities[11] = new City("Johannesburg", 950000, zombies, a);
+		cities[11].setX(760);
+		cities[11].setY(400);
 		
 		// city 13 Sydney
 		zombies = 1;

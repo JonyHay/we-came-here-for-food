@@ -105,6 +105,12 @@ public class Game extends GameCore {
 													// pixels for any given
 													// monitor
 	}
+	
+	public void addAgent(Agent a) {
+		
+		this.agentHandler.addAgent(a);
+		
+	}
 
 	public void init() {
 		// Animation
@@ -118,6 +124,11 @@ public class Game extends GameCore {
 		// Map
 		mapName = "res/wMap.jpg";
 		themeName = "res/theme.jpg";
+		
+		// Images
+		imgMedic = Toolkit.getDefaultToolkit().createImage("res/medic.png");
+		imgOffence = Toolkit.getDefaultToolkit().createImage("res/heavy.png");
+		imgDefence = Toolkit.getDefaultToolkit().createImage("res/engineer.png");
 
 		wMapAni.addFrame(Toolkit.getDefaultToolkit().createImage(mapName), 10); // 10
 																				// is
@@ -241,13 +252,13 @@ public class Game extends GameCore {
 
 		// // Sound
 		Sound s = new Sound("res/music.wav");
-		//s.start();
+		s.start();
 
 		// Cities
 		cities = new Cities();
 		agentHandler = new AgentHandler();
 
-		mouseHandler = new MouseHandler(cities, rings, this);
+		mouseHandler = new MouseHandler(cities, rings, this, agentHandler);
 		this.addMouseListener(mouseHandler);
 
 		bank = new Money(10000);
@@ -733,6 +744,9 @@ public class Game extends GameCore {
 
 		}
 		
+		drawPlayerAgents(g);
+		drawCityAgents(g);
+		
 		messageOverlay(g);
 
 		noiseOverlay(g);
@@ -800,5 +814,85 @@ public class Game extends GameCore {
 	}
 
 	private BufferedImage[] noiseMaps;
+	
+	private Image imgMedic, imgOffence, imgDefence;
+	
+	private void drawPlayerAgents(Graphics2D g) {
+		
+		// Get the agents
+		ArrayList<Agent> agents = agentHandler.getAgentList();
+		
+		int row = 0;
+		int i = 0;
+		int iconsize = 28;
+		int padding = 6;
+		
+		ListIterator<Agent> li = agents.listIterator();
+		while (li.hasNext()) {
+			
+			Agent a = li.next();
+			
+			//g.setColor(Color.red);
+			//g.fillRect(767 + ((iconsize + 21) * i), 607 + ((iconsize + 5) * row), 32, 32);
+			
+			Image img = imgMedic;
+			if (a.getSpeciality().getName().equals("Offence")) {
+				img = imgOffence;
+			}
+			if (a.getSpeciality().getName().equals("Defence")) {
+				img = imgDefence;
+			}
+			
+			g.drawImage(img, 767 + ((iconsize + 21) * i), 607 + ((iconsize + 5) * row), 32, 32, this);
+			
+			i++;
+			if (i == 5) {
+				i = 0;
+				row++;
+			}
+			
+		}
+		
+	}
+	
+	private void drawCityAgents(Graphics2D g) {
+		
+		if (mouseHandler.getSelectedCityIndex() == -1) return;
+		
+			// Get the agents
+			ArrayList<Agent> agents = cities.getCityByIndex(mouseHandler.getSelectedCityIndex()).getAgents();
+			
+			int row = 0;
+			int i = 0;
+			int iconsize = 28;
+			int padding = 6;
+			
+			ListIterator<Agent> li = agents.listIterator();
+			while (li.hasNext()) {
+				
+				Agent a = li.next();
+				
+				//g.setColor(Color.red);
+				//g.fillRect(487 + ((iconsize + 21) * i), 607 + ((iconsize + 5) * row), 32, 32);
+				
+				Image img = imgMedic;
+				if (a.getSpeciality().getName().equals("Offence")) {
+					img = imgOffence;
+				}
+				if (a.getSpeciality().getName().equals("Defence")) {
+					img = imgDefence;
+				}
+				
+				g.drawImage(img, 487 + ((iconsize + 21) * i), 607 + ((iconsize + 5) * row), 32, 32, this);
+
+				i++;
+				if (i == 5) {
+					i = 0;
+					row++;
+				}
+				
+			}
+		
+	}
 
 }

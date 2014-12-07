@@ -108,6 +108,18 @@ public class City extends Sprite {
 			}
 		}
 	}
+	
+	public void addAgent(Agent a) {
+		
+		agents.add(a);
+		
+	}
+	
+	public ArrayList<Agent> getAgents() {
+		
+		return this.agents;
+		
+	}
 
 	public void updateAgents(long elapsed)
     {
@@ -177,4 +189,14 @@ public class City extends Sprite {
 		this.zombies = zombies;
 	}
 
+	public Agent removeAgent(int agentID) {
+		int j = 0;
+		for (; j < 15; j++) {
+			if (agents.get(j).getAgentID() == agentID) {
+				break;
+			}
+		}
+		return agents.remove(j);
+	}
+	
 }

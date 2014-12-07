@@ -47,6 +47,8 @@ public class Game extends GameCore {
 	private static 	int 		botLeftBoxOffsetX, botLeftBoxOffsetY, botLeftBoxSizeX, botLeftBoxSizeY, botLeftBoxArcX, botLeftBoxArcY;
 	private static 	int 		botMidBoxOffsetX, botMidBoxOffsetY, botMidBoxSizeX, botMidBoxSizeY, botMidBoxArcX, botMidBoxArcY;
 	private static 	int 		botRightBoxOffsetX, botRightBoxOffsetY, botRightBoxSizeX, botRightBoxSizeY, botRightBoxArcX, botRightBoxArcY;
+	private static int 			farRightBoxOffsetX, farRightBoxOffsetY, farRightBoxSizeX, farRightBoxSizeY, farRightBoxArcX, farRightBoxArcY;
+	private static int 			farfarRightBoxOffsetX, farfarRightBoxOffsetY, farfarRightBoxSizeX, farfarRightBoxSizeY, farfarRightBoxArcX, farfarRightBoxArcY;
 							
 	private 	  	Color 		transpColor;
 	private 	   	Image 		fadeLine;
@@ -149,7 +151,7 @@ public class Game extends GameCore {
 		
 		botMidBoxOffsetX 	= botLeftBoxOffsetX + botLeftBoxSizeX + 30;
 		botMidBoxOffsetY 	= botLeftBoxOffsetY;
-		botMidBoxSizeX 		= botLeftBoxSizeX;
+		botMidBoxSizeX 		= 250;
 		botMidBoxSizeY 		= botLeftBoxSizeY;
 		botMidBoxArcX	 	= 20;
 		botMidBoxArcY  		= 20;
@@ -160,6 +162,20 @@ public class Game extends GameCore {
 		botRightBoxSizeY 	= botMidBoxSizeY;
 		botRightBoxArcX	 	= 20;
 		botRightBoxArcY  	= 20;
+		
+		farRightBoxOffsetX 	= botRightBoxOffsetX + botRightBoxSizeX + 30;
+		farRightBoxOffsetY	= botRightBoxOffsetY;
+		farRightBoxSizeX 	= 200;
+		farRightBoxSizeY 	= botRightBoxSizeY;
+		farRightBoxArcX	 	= 20;
+		farRightBoxArcY  	= 20;
+		
+		farfarRightBoxOffsetX 	= farRightBoxOffsetX + farRightBoxSizeX + 30;
+		farfarRightBoxOffsetY	= farRightBoxOffsetY;
+		farfarRightBoxSizeX 	= 60;
+		farfarRightBoxSizeY 	= farRightBoxSizeY;
+		farfarRightBoxArcX	 	= 20;
+		farfarRightBoxArcY  	= 20;
 		
 		// Transparent Effect
 		transpColor 		= new Color(0, 0, 0, 0.5f);
@@ -242,6 +258,8 @@ public class Game extends GameCore {
 		g.drawRoundRect(botLeftBoxOffsetX, botLeftBoxOffsetY, botLeftBoxSizeX, botLeftBoxSizeY, botLeftBoxArcX, botLeftBoxArcY);
 		g.drawRoundRect(botLeftBoxOffsetX + 1, botLeftBoxOffsetY + 1, botLeftBoxSizeX - 2, botLeftBoxSizeY - 2, botLeftBoxArcX, botLeftBoxArcY);
 		g.drawRoundRect(botLeftBoxOffsetX + 2, botLeftBoxOffsetY + 2, botLeftBoxSizeX - 4, botLeftBoxSizeY - 4, botLeftBoxArcX, botLeftBoxArcY);
+	
+		drawBotLeftDetails(g);
 	}
 
 	public void drawBotMid(Graphics2D g)
@@ -252,6 +270,8 @@ public class Game extends GameCore {
 		g.drawRoundRect(botMidBoxOffsetX, botMidBoxOffsetY, botMidBoxSizeX, botMidBoxSizeY, botMidBoxArcX, botMidBoxArcY);
 		g.drawRoundRect(botMidBoxOffsetX + 1, botMidBoxOffsetY + 1, botMidBoxSizeX - 2, botMidBoxSizeY - 2, botMidBoxArcX, botMidBoxArcY);
 		g.drawRoundRect(botMidBoxOffsetX + 2, botMidBoxOffsetY + 2, botMidBoxSizeX - 4, botMidBoxSizeY - 4, botMidBoxArcX, botMidBoxArcY);
+	
+		drawBotMidDetails(g);
 	}
 	
 	public void drawBotRight(Graphics2D g)
@@ -262,6 +282,44 @@ public class Game extends GameCore {
 		g.drawRoundRect(botRightBoxOffsetX, botRightBoxOffsetY, botRightBoxSizeX, botRightBoxSizeY, botRightBoxArcX, botRightBoxArcY);
 		g.drawRoundRect(botRightBoxOffsetX + 1, botRightBoxOffsetY + 1, botRightBoxSizeX - 2, botRightBoxSizeY - 2, botRightBoxArcX, botRightBoxArcY);
 		g.drawRoundRect(botRightBoxOffsetX + 2, botRightBoxOffsetY + 2, botRightBoxSizeX - 4, botRightBoxSizeY - 4, botRightBoxArcX, botRightBoxArcY);
+	
+		drawBotRightDetails(g);
+	}
+	
+	public void drawFarRight(Graphics2D g)
+	{
+		g.setColor(transpColor);
+		g.fillRoundRect(farRightBoxOffsetX, farRightBoxOffsetY, farRightBoxSizeX, farRightBoxSizeY, farRightBoxArcX, farRightBoxArcY);
+		g.setColor(botBoxColor);
+		g.drawRoundRect(farRightBoxOffsetX, farRightBoxOffsetY, farRightBoxSizeX, farRightBoxSizeY, farRightBoxArcX, farRightBoxArcY);
+		g.drawRoundRect(farRightBoxOffsetX + 1, farRightBoxOffsetY + 1, farRightBoxSizeX - 2, farRightBoxSizeY - 2, farRightBoxArcX, farRightBoxArcY);
+		g.drawRoundRect(farRightBoxOffsetX + 2, farRightBoxOffsetY + 2, farRightBoxSizeX - 4, farRightBoxSizeY - 4, farRightBoxArcX, farRightBoxArcY);
+		
+		g.setColor(Color.WHITE);
+		g.setFont(new Font("TimesRoman", Font.PLAIN, 20));
+		// Horizontal Lines
+		for (int i = 1; i <= 2; i++)
+		{
+			g.drawLine(farRightBoxOffsetX + 3, (farRightBoxOffsetY + 3) + i*(farRightBoxSizeY - 4)/3, farRightBoxOffsetX + farRightBoxSizeX - 3, (farRightBoxOffsetY + 3) + i*(farRightBoxSizeY - 4)/3);
+		}
+	}
+	
+	public void drawFarFarRight(Graphics2D g)
+	{
+		g.setColor(transpColor);
+		g.fillRoundRect(farfarRightBoxOffsetX, farfarRightBoxOffsetY, farfarRightBoxSizeX, farfarRightBoxSizeY, farfarRightBoxArcX, farfarRightBoxArcY);
+		g.setColor(botBoxColor);
+		g.drawRoundRect(farfarRightBoxOffsetX, farfarRightBoxOffsetY, farfarRightBoxSizeX, farfarRightBoxSizeY, farfarRightBoxArcX, farfarRightBoxArcY);
+		g.drawRoundRect(farfarRightBoxOffsetX + 1, farfarRightBoxOffsetY + 1, farfarRightBoxSizeX - 2, farfarRightBoxSizeY - 2, farfarRightBoxArcX, farfarRightBoxArcY);
+		g.drawRoundRect(farfarRightBoxOffsetX + 2, farfarRightBoxOffsetY + 2, farfarRightBoxSizeX - 4, farfarRightBoxSizeY - 4, farfarRightBoxArcX, farfarRightBoxArcY);
+		
+		g.setColor(Color.WHITE);
+		g.setFont(new Font("TimesRoman", Font.PLAIN, 20));
+		// Horizontal Lines
+		for (int i = 1; i <= 2; i++)
+		{
+			g.drawLine(farfarRightBoxOffsetX + 3, (farfarRightBoxOffsetY + 3) + i*(farfarRightBoxSizeY - 4)/3, farfarRightBoxOffsetX + farfarRightBoxSizeX - 3, (farfarRightBoxOffsetY + 3) + i*(farfarRightBoxSizeY - 4)/3);
+		}
 	}
 	
 	public void drawTransparency(Graphics2D g)
@@ -306,7 +364,9 @@ public class Game extends GameCore {
 		g.drawRoundRect(zombieBoxOffSetX + 1, zombieBoxOffSetY + 1, hpMax - 2, hpBoxSizeY - 2, hpBoxArcX, hpBoxArcY);
 		g.drawRoundRect(zombieBoxOffSetX + 2, zombieBoxOffSetY + 2, hpMax - 4, hpBoxSizeY - 4, hpBoxArcX, hpBoxArcY);
 		g.setColor(Color.RED);
-		g.fillRoundRect(zombieBoxOffSetX + 3, zombieBoxOffSetY + 3, hp - 6, hpBoxSizeY - 5, hpBoxArcX, hpBoxArcY);
+		g.fillRoundRect(zombieBoxOffSetX + 3, zombieBoxOffSetY + 3, hp - 4, hpBoxSizeY - 5, hpBoxArcX, hpBoxArcY);
+		g.setColor(Color.WHITE);
+		g.drawString("100%", botLeftBoxOffsetX + 288, botLeftBoxOffsetY + 83);
 	}
 	
 	private void drawBotMidDetails(Graphics2D g)
@@ -404,6 +464,12 @@ public class Game extends GameCore {
 		// BotRight Box
 		drawBotRight(g);
 		
+		// Bot FarRight Box
+		drawFarRight(g);
+		
+		// Bot FarFarRight Box
+		drawFarFarRight(g);
+		
 		// Apply transparency
 		drawTransparency(g);
 		
@@ -411,23 +477,7 @@ public class Game extends GameCore {
 		drawCityIcons(g);		
 		
 		// macbook outline
-		drawMacOutline(g);
-		
-		/* 
-		 * City Info (Bot Left Box)
-		 * Need to implement MouseListener
-		*/
-		drawBotLeftDetails(g);
-		
-		drawBotMidDetails(g);
-		
-		drawBotRightDetails(g);
-		
-		
-		
-		
-	}
+		drawMacOutline(g);	
 	
-
-	
+	}	
 }

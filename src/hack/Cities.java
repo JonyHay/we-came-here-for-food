@@ -1,31 +1,55 @@
 package hack;
 
+import java.awt.Toolkit;
+
 import game2D.Animation;
 
 public class Cities {
 
 	private City[] cities;
-	final private int numberOfCities = 1;
+	final private int numberOfCities = 13;
+	
+	public Animation[] animations;
 	
 	public Cities(){
+		
+		animations = new Animation[3];
+		
+		animations[0] = new Animation();
+		animations[0].addFrame(Toolkit.getDefaultToolkit().createImage("res/green.png"), 1000);
+		
+		animations[1] = new Animation();
+		animations[1].addFrame(Toolkit.getDefaultToolkit().createImage("res/orange.png"), 1000);
+		
+		animations[2] = new Animation();
+		animations[2].addFrame(Toolkit.getDefaultToolkit().createImage("res/red.png"), 1000);
+		
 		cities = new City[numberOfCities];
 
 		// city 1, Glasgow
-		Animation a = new Animation();
+		Animation a = animations[0];
 		int population = 1200, zombies = 2;
 		cities[0] = new City("New Glasgow", population, zombies, a);
+		cities[0].setX(647);
+		cities[0].setY(185);
 		
 		// city 2 Istanbul
 		zombies = 0;
 		cities[1] = new City("Istanbul", 550000, zombies, a);
+		cities[1].setX(647);
+		cities[1].setY(385);
 
 		// city 3 Moscow
 		zombies = 0;
 		cities[2] = new City("Moscow", 12000000, zombies, a);
+		cities[2].setX(647);
+		cities[2].setY(250);
 		
 		// city 4 Tokyo
 		zombies = 30;
 		cities[3] = new City("Tokyo", 13000000, zombies, a);
+		cities[3].setX(1185);
+		cities[3].setY(245);
 		
 		// city 5 Delhi
 		zombies = 0;
@@ -46,14 +70,19 @@ public class Cities {
 		// city 9 New York
 		zombies = 5;
 		cities[8] = new City("New York", 19000000, zombies, a);
+		cities[8].setX(370);
+		cities[8].setY(235);
 		
 		// city 10 Lagos
 		zombies = 200;
 		cities[9] = new City("Lagos", 21000000, zombies, a);
 		
+		
 		// city 11 Cairo
 		zombies = 0;
 		cities[10] = new City("Cairo", 10000000, zombies, a);
+		cities[10].setX(785);
+		cities[10].setY(265);
 		
 		// city 12 Johannesburg
 		zombies = 9;
@@ -62,6 +91,8 @@ public class Cities {
 		// city 13 Sydney
 		zombies = 1;
 		cities[12] = new City("Sydney", 4000000, zombies, a);
+		cities[12].setX(1240);
+		cities[12].setY(425);
 	}
 	
 	public City getCityByName(String name){

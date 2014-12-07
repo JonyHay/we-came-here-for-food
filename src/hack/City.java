@@ -15,9 +15,6 @@ public class City extends Sprite {
 	private long countup = 0;
 
 	final private int maxInfection = 100; // max infection, elimination
-	
-	private int timer = 0;
-	final private int maxTimer = 50;
 
 	public City(String name, int population, int zombies, Animation a) {
 		super(a);
@@ -56,7 +53,7 @@ public class City extends Sprite {
 	}
 
 	public void updateInfection() {
-		if ((zombies > 0) && (timer == maxTimer))
+		if (zombies > 0)
 		{
 			int infection = (int) ((int) Math.random() * infectionRate + 1);
 			infection = population / maxInfection * infection;
@@ -68,11 +65,7 @@ public class City extends Sprite {
 	
 			if (zombies != 0)
 				increaseInfection();
-			
-			timer = 0;
 		}
-		else if (timer < maxTimer)
-			timer++;
 	}
 
 	public void eliminatingZombies(int eliminatingRate) {
@@ -115,24 +108,21 @@ public class City extends Sprite {
         {
                 Random r =  new Random();
                 int infectedPercent = zombies/population*100;
-                int agentOffenceAbility = agents.get(i).getBonusOffence() + agents.get(i).getSpeciality().getOffence();
-                int zombieReduction = Math.abs(((r.nextInt(zombies/(10 + agentOffenceAbility)) + agentOffenceAbility)  - (r.nextInt(zombies/10)));
+                if (r.nextInt(infectedPercent) > ((r.nextInt(infectedPercent) + agents.get(i).getBonusDefence() + agents.get(i).getSpeciality().getDefence())))
+                {
+                        agents.remove(i);
+                        i--;
+                }
+                int zombieReduction = (r.nextInt(zombies) + agents.get(i).getBonusOffence() + agents.get(i).getSpeciality().getOffence())/2;
                 if (zombieReduction < zombies)
                 {
                         zombies = zombies - zombieReduction;
                 }
-                int agentHealingAbility = agents.get(i).getBonusHealing() + agents.get(i).getSpeciality().getHealing();
-                int zombiesHealed = (Math.abs(((r.nextInt(zombies/(10 + agentHealingAbility)) + agentHealingAbility)  - (r.nextInt(zombies/10))) + 1)/2;
+                int zombiesHealed = (r.nextInt(zombies) + agents.get(i).getBonusHealing() + agents.get(i).getSpeciality().getHealing())/4;
                 if (zombiesHealed < zombies)
                 {
                         zombies = zombies - zombiesHealed;
                         population = population + zombiesHealed;
-                }
-                int agentDefenceAbility = agents.get(i).getBonusDefence() + agents.get(i).getSpeciality().getDefence();
-                if (r.nextInt(infectedPercent) > ((r.nextInt(infectedPercent + agentHealingAbility) + agentHealingAbility));
-                {
-                        agents.remove(i);
-                        i--;
                 }
         }
         countup = 0;

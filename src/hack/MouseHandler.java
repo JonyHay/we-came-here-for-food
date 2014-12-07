@@ -1,7 +1,10 @@
 package hack;
 
+import game2D.Sound;
+
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.Random;
 
 public class MouseHandler implements MouseListener {
 	
@@ -25,6 +28,8 @@ public class MouseHandler implements MouseListener {
 	public void mouseClicked(MouseEvent e) {
 		
 		System.out.println("*Clicked at " + e.getX() + "/" + e.getY());
+		int rnd = new Random().nextInt(3);
+		new Sound("res/blim" + rnd + ".wav").start();
 		
 		int cityCount = cities.getNumberOfCities();
 		

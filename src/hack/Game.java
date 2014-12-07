@@ -664,9 +664,11 @@ dollar = new Sprite(dollarAni);
 			if (hp < 0)
 				hp = 0;
 
-			if (hp <= 8) {
+			if (hp <= 68) {
 
 				this.dead = true;
+				long hours = runtime() / 1000;
+				livedays = (int)(hours / 24);
 
 			}
 
@@ -683,11 +685,13 @@ dollar = new Sprite(dollarAni);
 			}
 
 			// Update the time
-			long hours = runtime() / 1000;
-			if (hours < 48) {
-				txtTime = hours + " hours";
-			} else {
-				txtTime = (hours / 24) + " days";
+			if (!dead) {
+				long hours = runtime() / 1000;
+				if (hours < 48) {
+					txtTime = hours + " hours";
+				} else {
+					txtTime = (hours / 24) + " days";
+				}
 			}
 
 			wMap.shiftX(-0.5f);
@@ -769,6 +773,9 @@ dollar = new Sprite(dollarAni);
 
 		// macbook outline
 		drawMacOutline(g);
+		
+		drawPlayerAgents(g);
+		drawCityAgents(g);
 
 		// Show the zombies
 		if (dead) {
@@ -778,19 +785,21 @@ dollar = new Sprite(dollarAni);
 
 				g.setColor(Color.white);
 				g.fillRect(0, 0, gameWindowX, gameWindowY);
+				g.setColor(Color.RED);
+				g.setFont(new Font("TimesRoman", Font.BOLD, 60));
+				g.drawString("You DIED after " + livedays + " days.", 640, 530);
 
 			}
 
 		}
-		
-		drawPlayerAgents(g);
-		drawCityAgents(g);
 		
 		messageOverlay(g);
 
 		noiseOverlay(g);
 
 	}
+	
+	private int livedays = 0;
 
 	private void noiseOverlay(Graphics2D g) {
 

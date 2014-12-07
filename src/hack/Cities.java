@@ -41,7 +41,7 @@ public class Cities {
 
 		// city 3 Moscow
 		zombies = 2;
-		cities[2] = new City("Moscow", 12000000, zombies, a);
+		cities[2] = new City("Mosheep", 12000000, zombies, a);
 		cities[2].setX(950);
 		cities[2].setY(200);
 		
@@ -53,7 +53,7 @@ public class Cities {
 		
 		// city 5 Delhi
 		zombies = 2;
-		cities[4] = new City("New Delhi", 11000000, zombies, a);
+		cities[4] = new City("Delhi Mail", 11000000, zombies, a);
 		cities[4].setX(950);
 		cities[4].setY(260);
 		
@@ -71,7 +71,7 @@ public class Cities {
 		
 		// city 8 Mexico City
 		zombies = 2;
-		cities[7] = new City("New Mexico City", 11000000, zombies, a);
+		cities[7] = new City("New Mehico City", 11000000, zombies, a);
 		cities[7].setX(275);
 		cities[7].setY(246);
 		
@@ -95,7 +95,7 @@ public class Cities {
 		
 		// city 12 Johannesburg
 		zombies = 9;
-		cities[11] = new City("Johannesburg 2nd", 950000, zombies, a);
+		cities[11] = new City("Johannesburger", 950000, zombies, a);
 		cities[11].setX(760);
 		cities[11].setY(400);
 		

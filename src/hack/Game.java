@@ -384,9 +384,16 @@ public class Game extends GameCore {
 			
 		}
 		
-		float health = (float) zombies / (float) people;
-		hp = hpMax - (int) health;
+		float health = (float) zombies / (float) (people + zombies);
+		hp = hpMax - (int)(health * hpMax);
 		if (hp < 0) hp = 0;
+		
+		if (hp <= 2) {
+			
+			System.err.println("You lost!");
+			System.exit(1);
+			
+		}
 		
 		
 		// Update the info shown in the select panel

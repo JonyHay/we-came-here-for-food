@@ -579,7 +579,7 @@ public class Game extends GameCore {
 	private void noiseOverlay(Graphics2D g) {
 		
 		Random r = new Random();
-		int mapCount = 8;
+		int mapCount = 3;
 		
 		if (noiseMaps == null) {
 			

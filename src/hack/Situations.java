@@ -80,10 +80,13 @@ public class Situations {
 		} else if (event == 1) { // Invented soap
 			
 			int currentZombies = cities.getCityByIndex(cityID).getZombieNumber();
+			if (currentZombies > 0) {
 			int people = cities.getCityByIndex(cityID).getPopulation();
 			int increase = (int) (0.5f * people); // 50 percent
+			
 			cities.getCityByIndex(cityID).setZombieNumber(currentZombies - increase);
 			cities.getCityByIndex(cityID).setPopulation(people + increase);
+			}
 			message = replaceInString("$CITY has invented soap and used \nit to cure many zombies!", "$CITY", cityName);
 			
 		} else if (event == 2) { // Increase of zombies

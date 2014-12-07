@@ -124,29 +124,36 @@ public class City extends Sprite {
 	public void updateAgents(long elapsed)
     {
         countup += elapsed;
-        if (countup < 24000)
+        if (countup < 2000)
         {
                 return;
         }
         for(int i = 0; i < agents.size(); i++)
         {
                 Random r =  new Random();
-                int infectedPercent = zombies/population*100;
-                if (r.nextInt(infectedPercent) > ((r.nextInt(infectedPercent) + agents.get(i).getBonusDefence() + agents.get(i).getSpeciality().getDefence())))
-                {
-                        agents.remove(i);
-                        i--;
-                }
-                int zombieReduction = (r.nextInt(zombies) + agents.get(i).getBonusOffence() + agents.get(i).getSpeciality().getOffence())/2;
-                if (zombieReduction < zombies)
-                {
-                        zombies = zombies - zombieReduction;
-                }
-                int zombiesHealed = (r.nextInt(zombies) + agents.get(i).getBonusHealing() + agents.get(i).getSpeciality().getHealing())/4;
-                if (zombiesHealed < zombies)
-                {
-                        zombies = zombies - zombiesHealed;
-                        population = population + zombiesHealed;
+                int infectedPercent = ((zombies/population)*100) + 1;
+                if (zombies < 1) {
+                	zombies = 0;
+                } else {
+	                int zombieReduction = (r.nextInt(zombies) + agents.get(i).getBonusOffence() + agents.get(i).getSpeciality().getOffence())/2;
+	                if (zombieReduction <= zombies)
+	                {
+	                        zombies = zombies - zombieReduction;
+	                }
+	                if (zombies >= 1)  {
+	                int zombiesHealed = (r.nextInt(zombies) + agents.get(i).getBonusHealing() + agents.get(i).getSpeciality().getHealing())/4;
+	                if (zombiesHealed <= zombies)
+	                {
+	                        zombies = zombies - zombiesHealed;
+	                        population = population + zombiesHealed;
+	                }
+	                
+	                if (r.nextInt(infectedPercent) > ((r.nextInt(infectedPercent) + agents.get(i).getBonusDefence() + agents.get(i).getSpeciality().getDefence())))
+	                {
+	                        agents.remove(i);
+	                        i--;
+	                }
+	                }
                 }
         }
         countup = 0;

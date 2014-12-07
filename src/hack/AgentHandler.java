@@ -50,7 +50,7 @@ public class AgentHandler {
 	}
 
 	public void populateAgents() {
-		for (int j = 0; j < 15; j++) {
+		for (int j = 0; j < 7; j++) {
 			Random r = new Random();
 			int result = r.nextInt(3);
 			if (result == 0) {
@@ -63,6 +63,9 @@ public class AgentHandler {
 				addOffenceAgent();
 			}
 		}
+		addMedicAgent();
+		addOffenceAgent();
+		addDefenceAgent();
 	}
 
 	public void addMedicAgent() {

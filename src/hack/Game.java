@@ -276,6 +276,12 @@ dollar = new Sprite(dollarAni);
 		situations = new Situations(cities, bank);
 
 	}
+	
+	public Money getBank() {
+		
+		return this.bank;
+		
+	}
 
 	public void drawtTheme(Graphics2D g) {
 		for (int i = 0; i < 50; i++) {
@@ -514,6 +520,7 @@ dollar = new Sprite(dollarAni);
 				botLeftBoxOffsetY + 55);
 
 		int zombieBoxOffSetX = 260, zombieBoxOffSetY = 667;
+		/*
 		g.setColor(hpBoxColor);
 		g.drawRoundRect(zombieBoxOffSetX, zombieBoxOffSetY, hpMax, hpBoxSizeY,
 				hpBoxArcX, hpBoxArcY);
@@ -523,7 +530,7 @@ dollar = new Sprite(dollarAni);
 				hpBoxSizeY - 4, hpBoxArcX, hpBoxArcY);
 		g.setColor(Color.RED);
 		g.fillRoundRect(zombieBoxOffSetX + 3, zombieBoxOffSetY + 3,
-				(hpMax - hp), hpBoxSizeY - 5, hpBoxArcX, hpBoxArcY);
+				(hpMax - hp), hpBoxSizeY - 5, hpBoxArcX, hpBoxArcY);*/
 		g.setColor(Color.WHITE);
 		g.drawString(txtInfectedPercentage, botLeftBoxOffsetX + 288,
 				botLeftBoxOffsetY + 83);
@@ -591,8 +598,10 @@ dollar = new Sprite(dollarAni);
 					/ (float) (selCity.getZombieNumber() + (float) selCity
 							.getPopulation());
 			percent *= 100;
+			try {
 			txtInfectedPercentage = ""
 					+ String.valueOf(percent).substring(0, 4) + "%";
+			} catch (Exception e) { txtInfectedPercentage = ""; } finally {}
 
 		} else {
 
@@ -632,18 +641,19 @@ dollar = new Sprite(dollarAni);
 				people += c.getPopulation();
 				zombies += c.getZombieNumber();
 
+				
 				float cityHealth = 1 / ((float) c.getZombieNumber() / (float) c
 						.getPopulation());
 
-				if (cityHealth > 0.75f && cityHealth <= 1.0f) {
+				if (cityHealth > 1.4f && cityHealth <= 1.5f) {
 					cities.getCityByIndex(i).setAnimation(cities.animations[0]);
 				}
 
-				if (cityHealth > 0.25f && cityHealth <= 0.75f) {
+				if (cityHealth > 0.6f && cityHealth <= 1.4f) {
 					cities.getCityByIndex(i).setAnimation(cities.animations[1]);
 				}
 
-				if (cityHealth >= 0.0f && cityHealth <= 0.25f) {
+				if (cityHealth >= 0.0f && cityHealth <= 0.6f) {
 					cities.getCityByIndex(i).setAnimation(cities.animations[2]);
 				}
 
@@ -654,7 +664,7 @@ dollar = new Sprite(dollarAni);
 			if (hp < 0)
 				hp = 0;
 
-			if (hp <= 2) {
+			if (hp <= 8) {
 
 				this.dead = true;
 
@@ -665,10 +675,10 @@ dollar = new Sprite(dollarAni);
 
 			// Collect tax ever 12 seconds
 			taxElapsed += elapsed;
-			if (taxElapsed >= 12000) {
+			if (taxElapsed >= 8000) {
 				taxElapsed = 0;
 
-				bank.Taxes(people / 10000);
+				bank.Taxes(people / 100);
 
 			}
 

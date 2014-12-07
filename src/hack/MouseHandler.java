@@ -81,12 +81,53 @@ public class MouseHandler implements MouseListener {
 			else {
 
 				doClickOnAgents(e);
-
+				doClickOnPurchase(e);
+				
 			}
 
 		}
 
 	}
+	
+	private void doClickOnPurchase(MouseEvent e) {
+		
+		if ((e.getX() >= 1039 && e.getX() < 1235) && (e.getY() >= 609 && e.getY() < 643)) {
+			if (agentHandler.getAgentList().size() < 15) {
+				if (tg.getBank().Purchase(8000))
+					agentHandler.addOffenceAgent();
+			}
+		}
+		
+		if ((e.getX() >= 1038 && e.getX() < 1235) && (e.getY() >= 644 && e.getY() < 676)) {
+			if (agentHandler.getAgentList().size() < 15)
+				if (tg.getBank().Purchase(6000))
+						agentHandler.addDefenceAgent();
+		}
+		
+		if ((e.getX() >= 1038 && e.getX() < 1235) && (e.getY() >= 677 && e.getY() < 707)) {
+			if (agentHandler.getAgentList().size() < 15)
+				if (tg.getBank().Purchase(7000))
+						agentHandler.addMedicAgent();
+		}
+		
+		// BELOW THIS IS UPGRADES
+		
+		if ((e.getX() >= 1267 && e.getX() < 1326) && (e.getY() >= 609 && e.getY() < 643)) {
+			if (tg.getBank().Purchase(50000))
+				agentHandler.buyUpgrade("Better Med-Kits");
+		}
+		
+		if ((e.getX() >= 1267 && e.getX() < 1326) && (e.getY() >= 644 && e.getY() < 676)) {
+			if (tg.getBank().Purchase(50000))
+				agentHandler.buyUpgrade("Big Guns!");
+		}
+		
+		if ((e.getX() >= 1267 && e.getX() < 1326) && (e.getY() >= 677 && e.getY() < 707)) {
+			//agentHandler.buyUpgrade("Better Med-Kits");
+		}
+		
+	}
+	
 
 	private void doClickOnAgents(MouseEvent e) {
 		

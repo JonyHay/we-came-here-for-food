@@ -83,6 +83,7 @@ public class City extends Sprite {
 		else if (timer < maxTimer)
 			timer++;
 	}
+	
 
 	public void addAgents(ArrayList<Agent> a) {
 		if (a.size() != 0) {

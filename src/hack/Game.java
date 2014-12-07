@@ -57,6 +57,8 @@ public class Game extends GameCore {
 	private 		AgentHandler	agentHandler;
 	
 	private MouseHandler mouseHandler;
+	
+	private String txtCityName = "", txtHumanPopulation, txtInfectedPopulation, txtInfectedPercentage;
 
 	public static void main(String[] args) 
 	{ 
@@ -361,9 +363,12 @@ public class Game extends GameCore {
 	{
 		g.setColor(Color.WHITE);
 		g.setFont(new Font("TimesRoman", Font.PLAIN, 20));
-		g.drawString(txtCityName, botLeftBoxOffsetX + 30, botLeftBoxOffsetY + 30);
-		g.drawString(txtHumanPopulation, botLeftBoxOffsetX + 30, botLeftBoxOffsetY + 55);
-		g.drawString(txtInfectedPopulation, botLeftBoxOffsetX + 30, botLeftBoxOffsetY + 80);
+		g.drawString("City Name:", botLeftBoxOffsetX + 30, botLeftBoxOffsetY + 30);
+		g.drawString("Human Population:", botLeftBoxOffsetX + 30, botLeftBoxOffsetY + 55);
+		g.drawString("Percentage Infected:", botLeftBoxOffsetX + 30, botLeftBoxOffsetY + 80);
+		
+		g.drawString(txtCityName, botLeftBoxOffsetX + 270, botLeftBoxOffsetY + 30);
+		g.drawString(txtHumanPopulation, botLeftBoxOffsetX + 280, botLeftBoxOffsetY + 55);
 		
 		int zombieBoxOffSetX = 260, zombieBoxOffSetY = 667;
 		g.setColor(hpBoxColor);
@@ -371,12 +376,10 @@ public class Game extends GameCore {
 		g.drawRoundRect(zombieBoxOffSetX + 1, zombieBoxOffSetY + 1, hpMax - 2, hpBoxSizeY - 2, hpBoxArcX, hpBoxArcY);
 		g.drawRoundRect(zombieBoxOffSetX + 2, zombieBoxOffSetY + 2, hpMax - 4, hpBoxSizeY - 4, hpBoxArcX, hpBoxArcY);
 		g.setColor(Color.RED);
-		g.fillRoundRect(zombieBoxOffSetX + 3, zombieBoxOffSetY + 3, hp - 4, hpBoxSizeY - 5, hpBoxArcX, hpBoxArcY);
+		g.fillRoundRect(zombieBoxOffSetX + 3, zombieBoxOffSetY + 3, (hpMax -hp), hpBoxSizeY - 5, hpBoxArcX, hpBoxArcY);
 		g.setColor(Color.WHITE);
-		g.drawString("100%", botLeftBoxOffsetX + 288, botLeftBoxOffsetY + 83);
+		g.drawString(txtInfectedPercentage, botLeftBoxOffsetX + 288, botLeftBoxOffsetY + 83);
 	}
-	
-	private String txtCityName = "", txtHumanPopulation, txtInfectedPopulation;
 	
 	private void drawBotMidDetails(Graphics2D g)
 	{
@@ -454,14 +457,16 @@ public class Game extends GameCore {
 			
 			City selCity = cities.getCityByIndex(mouseHandler.getSelectedCityIndex());
 			txtCityName = selCity.getCityName();
-			txtHumanPopulation = "Population " + selCity.getPopulation();
-			txtInfectedPopulation = "" + selCity.getZombieNumber() + " Infected";
-			
+			txtHumanPopulation = "" + selCity.getPopulation();
+			txtInfectedPopulation = "" + selCity.getZombieNumber();
+			txtInfectedPercentage = "" + (float) selCity.getZombieNumber()/ (float) (selCity.getZombieNumber() + (float) selCity.getPopulation()) + "%";
+					
 		} else {
 			
 			txtCityName = "";
 			txtHumanPopulation = "";
 			txtInfectedPopulation = "";
+			txtInfectedPercentage = "";
 			
 		}
 

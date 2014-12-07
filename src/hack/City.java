@@ -17,7 +17,7 @@ public class City extends Sprite {
 	final private int maxInfection = 100; // max infection, elimination
 
 	private int timer = 0;
-	final private int maxTimer = 5;
+	final private int maxTimer = 50;
 	
 	
 

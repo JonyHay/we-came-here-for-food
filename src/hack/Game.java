@@ -5,6 +5,8 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Toolkit;
+import java.awt.image.BufferedImage;
+import java.util.Random;
 
 import game2D.Animation;
 import game2D.GameCore;
@@ -15,8 +17,8 @@ import game2D.BadCloser;
 @SuppressWarnings("serial")
 public class Game extends GameCore {
 	
-	private static 	Animation	wMapAni, tThemeAni, bThemeAni, cityGreenAni, cityYellowAni, cityRedAni;
-	private static 	Sprite 		wMap, tTheme, bTheme, cityGreen, cityYellow, cityRed;
+	private static 	Animation	wMapAni, wMap2Ani, tThemeAni, bThemeAni, cityGreenAni, cityYellowAni, cityRedAni;
+	private static 	Sprite 		wMap, wMap2, tTheme, bTheme, cityGreen, cityYellow, cityRed;
 	private static 	Game 		game;	
 	
 	private static 	int 		gameWindowX, gameWindowY;
@@ -58,7 +60,9 @@ public class Game extends GameCore {
 	
 	private MouseHandler mouseHandler;
 	
-	private String txtCityName = "", txtHumanPopulation, txtInfectedPopulation, txtInfectedPercentage;
+	private Money bank;
+	
+	private String txtCityName = "", txtHumanPopulation, txtInfectedPopulation, txtInfectedPercentage, txtMoney = "", txtTime = "";
 
 	public static void main(String[] args) 
 	{ 
@@ -86,14 +90,18 @@ public class Game extends GameCore {
 		tThemeAni.addFrame(Toolkit.getDefaultToolkit().createImage(themeName), 10);
 		bThemeAni.addFrame(Toolkit.getDefaultToolkit().createImage(themeName), 10);
 		
-		// Sprite
-		wMap 				= new Sprite(wMapAni);
-		tTheme 				= new Sprite(tThemeAni);
-		bTheme	 			= new Sprite(bThemeAni);
-		
 		// Game
 		gameWindowX 		= 1365; 
 		gameWindowY 		= 730;
+		
+		// Sprite
+		wMap 				= new Sprite(wMapAni);
+		wMap2				= new Sprite(wMapAni);
+		wMap2.setX(gameWindowX - 15);
+		tTheme 				= new Sprite(tThemeAni);
+		bTheme	 			= new Sprite(bThemeAni);
+		
+		
 		
 		// Values
 		mapOffsetX 			= 8; 
@@ -196,6 +204,8 @@ public class Game extends GameCore {
 		mouseHandler = new MouseHandler(cities);
 		this.addMouseListener(mouseHandler);
 		
+		bank = new Money(10000);
+		
 		
 	}
 	
@@ -227,7 +237,7 @@ public class Game extends GameCore {
 		g.fillRoundRect(moneyBoxOffsetX, moneyBoxOffsetY, moneyBoxSizeX, moneyBoxSizeY, moneyBoxArcX, moneyBoxArcY);
 		g.setColor(Color.WHITE);
 		g.setFont(new Font("TimesRoman", Font.PLAIN, 20));
-		g.drawString("Money", moneyOffsetX, moneyOffsetY);
+		g.drawString(txtMoney, moneyOffsetX, moneyOffsetY);
 		g.setColor(moneyColor);
 		g.drawRoundRect(moneyBoxOffsetX, moneyBoxOffsetY, moneyBoxSizeX, moneyBoxSizeY, moneyBoxArcX, moneyBoxArcY);
 		g.drawRoundRect(moneyBoxOffsetX + 1, moneyBoxOffsetY + 1, moneyBoxSizeX - 2, moneyBoxSizeY - 2, moneyBoxArcX, moneyBoxArcY);
@@ -240,7 +250,7 @@ public class Game extends GameCore {
 		g.fillRoundRect(timeBoxOffsetX, timeBoxOffsetY, timeBoxSizeX, timeBoxSizeY, timeBoxArcX, timeBoxArcY);
 		g.setColor(Color.WHITE);
 		g.setFont(new Font("TimesRoman", Font.PLAIN, 20));
-		g.drawString("Time", timeOffsetX, timeOffsetY);
+		g.drawString(txtTime, timeOffsetX, timeOffsetY);
 		g.setColor(timeColor);
 		g.drawRoundRect(timeBoxOffsetX, timeBoxOffsetY, timeBoxSizeX, timeBoxSizeY, timeBoxArcX, timeBoxArcY);
 		g.drawRoundRect(timeBoxOffsetX + 1, timeBoxOffsetY + 1, timeBoxSizeX - 2, timeBoxSizeY - 2, timeBoxArcX, timeBoxArcY);
@@ -420,11 +430,12 @@ public class Game extends GameCore {
 		int people = 0;
 		int zombies = 0;
 		
+		cities.update(elapsed);
+		
 		// Update each city
 		for (int i = 0; i < cityCount; i++) {
 			
 			City c = cities.getCityByIndex(i);
-			c.update(elapsed);
 			c.updateInfection();
 			c.updateAgents(elapsed);
 			
@@ -466,7 +477,9 @@ public class Game extends GameCore {
 			txtCityName = selCity.getCityName();
 			txtHumanPopulation = "" + selCity.getPopulation();
 			txtInfectedPopulation = "" + selCity.getZombieNumber();
-			txtInfectedPercentage = "" + (float) selCity.getZombieNumber()/ (float) (selCity.getZombieNumber() + (float) selCity.getPopulation()) + "%";
+			float percent = (float) selCity.getZombieNumber()/ (float) (selCity.getZombieNumber() + (float) selCity.getPopulation());
+			percent *= 100;
+			txtInfectedPercentage = "" + String.valueOf(percent).substring(0, 4) + "%";
 					
 		} else {
 			
@@ -476,13 +489,49 @@ public class Game extends GameCore {
 			txtInfectedPercentage = "";
 			
 		}
+		
+		// Update the money counter
+		txtMoney = "$" + bank.cash;
+		
+		// Collect tax ever 12 seconds
+		taxElapsed += elapsed;
+		if (taxElapsed >= 12000) {
+			taxElapsed = 0;
+			
+			bank.Taxes(people / 10000);
+			
+		}
+		
+		// Update the time
+		long hours = runtime() / 1000;
+		if (hours < 48) {
+			txtTime = hours + " hours";
+		} else {
+			txtTime = (hours / 24) + " days";
+		}
+		
+		wMap.shiftX(-0.5f);
+		wMap.update(elapsed);
+		wMap2.shiftX(-0.5f);
+		wMap2.update(elapsed);
+		
+		if (wMap.getX() + (gameWindowX - 15) <= 0) {
+			wMap.setX(gameWindowX - 15);
+			System.out.println("Off screen, moving to " + (wMap.getWidth() * 2));
+		}
+		if (wMap2.getX() + (gameWindowX - 15) <= 0) {
+			wMap2.setX(gameWindowX - 15);
+		}
 
 	}
+	
+	private long taxElapsed = 0;
 
 	public void draw(Graphics2D g) 
 	{		
 		// Map
-		g.drawImage(wMapAni.getImage(), mapOffsetX, mapOffsetY, mapSizeX, mapSizeY, this); //need to generalise screen pixels for any given monitor	
+		g.drawImage(wMap.getImage(), (int)wMap.getX(), mapOffsetY, mapSizeX, mapSizeY, this); //need to generalise screen pixels for any given monitor	
+		g.drawImage(wMap2.getImage(), (int)wMap2.getX(), mapOffsetY, mapSizeX, mapSizeY, this); //need to generalise screen pixels for any given monitor	
 						
 		// Top Theme
 		drawtTheme(g);
@@ -522,6 +571,42 @@ public class Game extends GameCore {
 		
 		// macbook outline
 		drawMacOutline(g);	
+		
+		noiseOverlay(g);
 	
 	}	
+	
+	private void noiseOverlay(Graphics2D g) {
+		
+		Random r = new Random();
+		int mapCount = 8;
+		
+		if (noiseMaps == null) {
+			
+			noiseMaps = new BufferedImage[mapCount];
+			
+			for (int i = 0; i < mapCount; i++) {
+				System.out.println("Generating map " + i);
+				noiseMaps[i] = new BufferedImage(gameWindowX / 2, gameWindowY / 2, BufferedImage.TYPE_INT_ARGB);
+				Graphics2D g2 = noiseMaps[i].createGraphics();
+				for (int x = 0; x < gameWindowX / 2; x+=2) {
+					for (int y = 0; y < gameWindowY / 2; y+=2) {
+						float f = r.nextFloat() * 0.1f;
+						g2.setColor(new Color(0, 0, 0, f));
+						g2.fillRect(x, y, 2, 2);
+					}
+				}
+					
+			}
+			
+			System.out.println("Generated noise maps.");
+			
+		}
+		
+		g.drawImage(noiseMaps[r.nextInt(mapCount)], 0, 0, gameWindowX, gameWindowY, this);
+		
+	}
+	
+	private BufferedImage[] noiseMaps;
+	
 }

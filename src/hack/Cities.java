@@ -31,6 +31,7 @@ public class Cities {
 		int population = 1200, zombies = 2;
 		cities[0] = new City("New Glasgow", population, zombies, a);
 		cities[0].setX(647);
+		cities[0].setVelocityX(1.0f);
 		cities[0].setY(185);
 		
 		// city 2 Istanbul
@@ -38,12 +39,14 @@ public class Cities {
 		cities[1] = new City("Istanbul", 550000, zombies, a);
 		cities[1].setX(770);
 		cities[1].setY(230);
+		cities[1].setVelocityX(1.0f);
 
 		// city 3 Moscow
 		zombies = 2;
 		cities[2] = new City("Mosheep", 12000000, zombies, a);
 		cities[2].setX(950);
 		cities[2].setY(200);
+		cities[2].setVelocityX(1.0f);
 		
 		// city 4 Tokyo
 		zombies = 30;
@@ -121,5 +124,16 @@ public class Cities {
 	}
 	public int getNumberOfCities(){
 		return numberOfCities;
+	}
+	public void update(long elapsed) {
+		
+		for (int i = 0; i < numberOfCities; i++) {
+			
+			cities[i].shiftX(-0.5f);
+			if (cities[i].getX() <= 0.0f)
+				cities[i].setX(1350.0f);
+			
+		}
+		
 	}
 }

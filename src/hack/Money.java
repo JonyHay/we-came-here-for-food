@@ -1,7 +1,6 @@
 package hack;
 
 public class Money {
-	
 	final private int TAXPERPERSON = 2;
 	int cash;
 
@@ -10,11 +9,14 @@ public class Money {
 	}
 
 	public void Taxes(int population) {
-		cash += population * TAXPERPERSON; 
+		cash += population * TAXPERPERSON;
 	}
 
-	public void Purchase(int cost) {
-		cash = cash - cost;
+	public boolean Purchase(int cost) {
+		if (cash - cost > 0) {
+			cash = cash - cost;
+			return true;
+		}
+		return false;
 	}
-	
 }

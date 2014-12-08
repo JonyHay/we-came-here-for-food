@@ -92,6 +92,8 @@ public class Game extends GameCore {
 
 	public boolean alertMode = false;
 	
+	private int initialHealth = -1;
+	
 	public void noAlert() {
 		
 		alertMode = false;
@@ -490,6 +492,7 @@ dollar = new Sprite(dollarAni);
 		int cityCount = cities.getNumberOfCities();
 		for (int i = 0; i < cityCount; i++) {
 			City c = cities.getCityByIndex(i);
+			if (c.isDead()) continue;
 			g.drawImage(c.getImage(), (int) c.getX(), (int) c.getY(),
 					c.getWidth(), c.getHeight(), this);
 		}
@@ -505,6 +508,10 @@ dollar = new Sprite(dollarAni);
 	}
 
 	private void drawBotLeftDetails(Graphics2D g) {
+		
+		if (mouseHandler.getSelectedCityIndex() < 0) return;
+		int cityID = mouseHandler.getSelectedCityIndex();
+		
 		g.setColor(Color.WHITE);
 		g.setFont(new Font("TimesRoman", Font.PLAIN, 20));
 		g.drawString("City Name:", botLeftBoxOffsetX + 30,
@@ -520,7 +527,13 @@ dollar = new Sprite(dollarAni);
 				botLeftBoxOffsetY + 55);
 
 		int zombieBoxOffSetX = 260, zombieBoxOffSetY = 667;
-		/*
+		
+		City selCity = cities.getCityByIndex(cityID);
+		float percent = (float) selCity.getZombieNumber()
+				/ (float) (selCity.getZombieNumber() + (float) selCity
+						.getPopulation());
+		percent *= hpMax;
+		
 		g.setColor(hpBoxColor);
 		g.drawRoundRect(zombieBoxOffSetX, zombieBoxOffSetY, hpMax, hpBoxSizeY,
 				hpBoxArcX, hpBoxArcY);
@@ -530,7 +543,8 @@ dollar = new Sprite(dollarAni);
 				hpBoxSizeY - 4, hpBoxArcX, hpBoxArcY);
 		g.setColor(Color.RED);
 		g.fillRoundRect(zombieBoxOffSetX + 3, zombieBoxOffSetY + 3,
-				(hpMax - hp), hpBoxSizeY - 5, hpBoxArcX, hpBoxArcY);*/
+				((int) percent), hpBoxSizeY - 5, hpBoxArcX, hpBoxArcY);
+		
 		g.setColor(Color.WHITE);
 		g.drawString(txtInfectedPercentage, botLeftBoxOffsetX + 288,
 				botLeftBoxOffsetY + 83);
@@ -576,6 +590,18 @@ dollar = new Sprite(dollarAni);
 	}
 
 	public void update(long elapsed) {
+		
+		if (initialHealth == -1) {
+			
+			initialHealth = 0;
+			
+			for (int r = 0; r < cities.getNumberOfCities(); r++){
+				
+				initialHealth+= cities.getCityByIndex(r).getPopulation();
+				
+			}
+			
+		}
 
 		// Update the situations!
 		situations.update(elapsed);
@@ -642,29 +668,34 @@ dollar = new Sprite(dollarAni);
 				zombies += c.getZombieNumber();
 
 				
-				float cityHealth = 1 / ((float) c.getZombieNumber() / (float) c
-						.getPopulation());
+				int zombiesInCity = c.getZombieNumber();
+				int halfCuttof = (int) (c.getPopulation() * 0.5f);
 
-				if (cityHealth > 1.4f && cityHealth <= 1.5f) {
+				if (zombiesInCity == 0) {
 					cities.getCityByIndex(i).setAnimation(cities.animations[0]);
+					continue;
 				}
 
-				if (cityHealth > 0.6f && cityHealth <= 1.4f) {
+				if (zombiesInCity > 0 && zombiesInCity < halfCuttof) {
 					cities.getCityByIndex(i).setAnimation(cities.animations[1]);
+					continue;
 				}
 
-				if (cityHealth >= 0.0f && cityHealth <= 0.6f) {
+				if (zombiesInCity >= halfCuttof) {
 					cities.getCityByIndex(i).setAnimation(cities.animations[2]);
+					continue;
 				}
 
 			}
 
-			float health = (float) zombies / (float) (people + zombies);
-			hp = hpMax - (int) (health * hpMax);
+			float health = (float) people / (float) initialHealth;
+			
+			hp = (int) (health * hpMax);
+			
 			if (hp < 0)
 				hp = 0;
 
-			if (hp <= 68) {
+			if (hp <= 10) {
 
 				this.dead = true;
 				long hours = runtime() / 1000;
@@ -793,7 +824,8 @@ dollar = new Sprite(dollarAni);
 
 		}
 		
-		messageOverlay(g);
+		if (!dead)
+			messageOverlay(g);
 
 		noiseOverlay(g);
 

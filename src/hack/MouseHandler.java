@@ -63,13 +63,16 @@ public class MouseHandler implements MouseListener {
 				for (int i = 0; i < cityCount; i++) {
 
 					City city = cities.getCityByIndex(i);
+					
+					if (city.isDead()) continue;
+					
 					float distance = calculateDistance((int) city.getX(),
 							(int) city.getY(), e.getX(), e.getY());
 
 					if (distance < 0)
 						distance = distance * (-1);
 
-					if (distance < nearestDistance && distance < 40) {
+					if (distance < nearestDistance && distance < 30) {
 						selectedCity = i;
 						nearestDistance = distance;
 					}

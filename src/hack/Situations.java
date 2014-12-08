@@ -10,6 +10,8 @@ public class Situations {
 	private String message;
 	private boolean toggleAlert;
 	private Money bank;
+	private int noEventCount = 0;
+	private int maxNoEvents = 2;
 	
 	public Situations(Cities c, Money m) {
 
@@ -48,18 +50,49 @@ public class Situations {
 		dayElapsed = 0;
 
 		// 50/50 chance of event occuring
-		if (rnd.nextInt(6) > 3) {
+		if (rnd.nextInt(6) > 3 || noEventCount == maxNoEvents) {
+			noEventCount = 0;
 			throwEvent();
 		} else {
 			System.err.println("No situation.");
+			noEventCount++;
 		}
 
+	}
+	
+	private int selectCityID() {
+		
+		int cityID = -1;
+		int iterations = 0;
+		
+		while (cityID == -1) {
+			
+			iterations++;
+			
+			cityID = rnd.nextInt(cities.getNumberOfCities());
+			
+			if (iterations == 10) break;
+			
+			// Not dead cities
+			if (cities.getCityByIndex(cityID).isDead()) {
+				cityID = -1;
+			}
+			
+			// Not severely infect cities
+			if (cities.getCityByIndex(cityID).getPercentageOfPopulation() > 50) {
+				cityID = -1;
+			}
+			
+		}
+		
+		return cityID;
+		
 	}
 
 	private void throwEvent() {
 
 		// Select city
-		int cityID = rnd.nextInt(cities.getNumberOfCities());
+		int cityID = selectCityID();
 		String cityName = cities.getCityByIndex(cityID).getCityName();
 		System.out.println("Event for " + cityName);
 

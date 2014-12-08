@@ -206,4 +206,10 @@ public class City extends Sprite {
 		return agents.remove(j);
 	}
 	
+	public boolean isDead() {
+		
+		return (population < 1);
+		
+	}
+	
 }

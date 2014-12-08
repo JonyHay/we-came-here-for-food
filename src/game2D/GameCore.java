@@ -277,4 +277,11 @@ public abstract class GameCore extends JFrame implements KeyListener {
      * @param g The Graphics2D object to draw with.
      */
     public abstract void draw(Graphics2D g);
+    
+    public long runtime() {
+    	
+    	return currTime - startTime;
+    	
+    }
+    
 }

@@ -17,7 +17,7 @@ public class City extends Sprite {
 	final private int maxInfection = 100; // max infection, elimination
 
 	private int timer = 0;
-	final private int maxTimer = 50;
+	final private int maxTimer = 15;
 	
 	
 
@@ -60,9 +60,12 @@ public class City extends Sprite {
 	public void updateInfection() {
 		if ((zombies > 0) && (timer == maxTimer))
 		{
+			
 			int infection = (int) ((int) Math.random() * infectionRate + 1);
+			
 			infection = population / maxInfection * infection;
 			zombies += infection;
+			
 			if (population - infection >= 0)
 				population -= infection;
 			else
@@ -71,20 +74,39 @@ public class City extends Sprite {
 			if (zombies != 0)
 				increaseInfection();
 			
-
 			if (population == maxInfection - 1)
-			{
-				zombies += population - 1;
-				population = 0;
-			}
+				 {
+				 zombies += population - 1;
+				 population = 0;
+				 }
 			
 			timer = 0;
 		}
 		else if (timer < maxTimer)
 			timer++;
 	}
-	
 
+	public void eliminatingZombies(int eliminatingRate) {
+		if (eliminatingRate != maxInfection) {
+			int elimination = zombies / maxInfection * eliminatingRate;
+			if (zombies - elimination >= 0)
+				zombies -= elimination;
+			else
+				zombies = 0;
+		}
+	}
+
+	public void eliminatingPeople(int eliminatingRate) {
+		if (eliminatingRate != maxInfection) {
+			int elimination = population / maxInfection * eliminatingRate;
+			if (population - elimination >= 0)
+				population -= elimination;
+			else
+				population = 0;
+		}
+	}
+
+	// TODO: finish
 	public void addAgents(ArrayList<Agent> a) {
 		if (a.size() != 0) {
 			for (int i = 0; i < a.size(); i++) {
@@ -92,33 +114,52 @@ public class City extends Sprite {
 			}
 		}
 	}
+	
+	public void addAgent(Agent a) {
+		
+		agents.add(a);
+		
+	}
+	
+	public ArrayList<Agent> getAgents() {
+		
+		return this.agents;
+		
+	}
 
 	public void updateAgents(long elapsed)
     {
         countup += elapsed;
-        if (countup < 24000)
+        if (countup < 2000)
         {
                 return;
         }
         for(int i = 0; i < agents.size(); i++)
         {
                 Random r =  new Random();
-                int infectedPercent = zombies/population*100;
-                if (r.nextInt(infectedPercent) > ((r.nextInt(infectedPercent) + agents.get(i).getBonusDefence() + agents.get(i).getSpeciality().getDefence())))
-                {
-                        agents.remove(i);
-                        i--;
-                }
-                int zombieReduction = (r.nextInt(zombies) + agents.get(i).getBonusOffence() + agents.get(i).getSpeciality().getOffence())/2;
-                if (zombieReduction < zombies)
-                {
-                        zombies = zombies - zombieReduction;
-                }
-                int zombiesHealed = (r.nextInt(zombies) + agents.get(i).getBonusHealing() + agents.get(i).getSpeciality().getHealing())/4;
-                if (zombiesHealed < zombies)
-                {
-                        zombies = zombies - zombiesHealed;
-                        population = population + zombiesHealed;
+                int infectedPercent = ((zombies/population)*100) + 1;
+                if (zombies < 1) {
+                	zombies = 0;
+                } else {
+	                int zombieReduction = (r.nextInt(zombies) + agents.get(i).getBonusOffence() + agents.get(i).getSpeciality().getOffence())/2;
+	                if (zombieReduction <= zombies)
+	                {
+	                        zombies = zombies - zombieReduction;
+	                }
+	                if (zombies >= 1)  {
+	                int zombiesHealed = (r.nextInt(zombies) + agents.get(i).getBonusHealing() + agents.get(i).getSpeciality().getHealing())/4;
+	                if (zombiesHealed <= zombies)
+	                {
+	                        zombies = zombies - zombiesHealed;
+	                        population = population + zombiesHealed;
+	                }
+	                
+	                if (r.nextInt(infectedPercent) > ((r.nextInt(infectedPercent) + agents.get(i).getBonusDefence() + agents.get(i).getSpeciality().getDefence())))
+	                {
+	                        agents.remove(i);
+	                        i--;
+	                }
+	                }
                 }
         }
         countup = 0;
@@ -161,4 +202,20 @@ public class City extends Sprite {
 		this.zombies = zombies;
 	}
 
+	public Agent removeAgent(int agentID) {
+		int j = 0;
+		for (; j < 15; j++) {
+			if (agents.get(j).getAgentID() == agentID) {
+				break;
+			}
+		}
+		return agents.remove(j);
+	}
+	
+	public boolean isDead() {
+		
+		return (population < 1);
+		
+	}
+	
 }
